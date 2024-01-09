@@ -1,0 +1,273 @@
+// check the current folder we are in
+murti@murti:/home$ pwd
+/home
+
+// check the current content of the folder
+murti@murti:/home$ ls
+murti
+
+// check for hidden files and folders as well
+murti@murti:/home$ ls -al
+total 12
+drwxr-xr-x  3 root  root  4096 Jan  9 19:58 .
+drwxr-xr-x 20 root  root  4096 Jan  9 19:43 ..
+drwxr-x---  5 murti murti 4096 Jan  9 20:10 murti
+
+//
+murti@murti:/home$ ls -a
+.  ..  murti
+
+// check the contents of the main folder using "/"
+murti@murti:/home$ ls -al /
+total 2097232
+drwxr-xr-x  20 root root       4096 Jan  9 19:43 .
+drwxr-xr-x  20 root root       4096 Jan  9 19:43 ..
+lrwxrwxrwx   1 root root          7 Aug 10 00:17 bin -> usr/bin
+drwxr-xr-x   5 root root       4096 Jan  9 19:44 boot
+dr-xr-xr-x   2 root root       4096 Aug 10 05:06 cdrom
+drwxr-xr-x  20 root root       4040 Jan  9 19:57 dev
+
+// to navigate to another folder
+murti@murti:/home$ cd /etc
+
+// searching for files that start with something (using letters followed by *)
+murti@murti:/etc$ ls os*
+os-release
+
+// showing the content of certain file
+murti@murti:/etc$ cat os-release 
+PRETTY_NAME="Ubuntu 22.04.3 LTS"
+NAME="Ubuntu"
+VERSION_ID="22.04"
+VERSION="22.04.3 LTS (Jammy Jellyfish)"
+VERSION_CODENAME=jammy
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=jammy
+
+// getting information about the distribution "-a stands for all"
+murti@murti:/etc$ uname -a
+Linux murti 5.15.0-91-generic #101-Ubuntu SMP Tue Nov 14 13:30:08 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+
+// getting the hostname
+murti@murti:/etc$ hostname
+murti
+
+// to return to home folder and view the current folder
+murti@murti:/etc$ cd
+murti@murti:~$ pwd
+/home/murti
+
+// logout
+murti@murti:~$ logout
+
+// checking the date and time
+murti@murti:~$ date
+Tue Jan  9 09:51:04 PM UTC 2024
+
+// checking the date is specific format (year, month, day)
+murti@murti:~$ date +%y-%m-%d
+24-01-09
+
+// calendar
+// needs to be installed first
+murti@murti:~$ sudo apt install ncal
+murti@murti:~$ cal -3
+   December 2023          January 2024         February 2024      
+Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  
+                1  2      1  2  3  4  5  6               1  2  3  
+ 3  4  5  6  7  8  9   7  8  9 10 11 12 13   4  5  6  7  8  9 10  
+10 11 12 13 14 15 16  14 15 16 17 18 19 20  11 12 13 14 15 16 17  
+17 18 19 20 21 22 23  21 22 23 24 25 26 27  18 19 20 21 22 23 24  
+24 25 26 27 28 29 30  28 29 30 31           25 26 27 28 29        
+31       
+
+// uptime
+murti@murti:~$ uptime
+ 21:55:51 up  1:58,  2 users,  load average: 0.06, 0.06, 0.02
+
+// checking the history of executed commands
+ murti@murti:~$ history
+    1  ls
+    2  test
+    3  cd ..
+    4  clear
+    5  ls
+    6  cd murti/
+    7  ls
+    8  cd ..
+    9  ls
+   10  cd murti
+   11  whoami
+   12  ls
+   13  pwd
+
+// ending the session either "exit" or "logout"
+
+// checking the hiddent files and then checking the content of the bash_history
+murti@murti:~$ ls -a
+.   .bash_history  .bashrc  .config   .ssh
+..  .bash_logout   .cache   .profile  .sudo_as_admin_successful
+murti@murti:~$ cat .bash_history 
+ls
+test
+cd ..
+clear
+ls
+cd murti/
+ls
+cd ..
+ls
+cd murti
+whoami
+ls
+pwd
+top
+ls
+cd ..
+top
+clear
+ls
+cd ..
+pwd
+ls
+
+// envirenmental exploration >> exit the result with 'q' 
+murti@murti:~$ set | less
+
+// modify the parameters that are driving the environment
+murti@murti:~$ set -o
+allexport       off
+braceexpand     on
+emacs           on
+errexit         off
+errtrace        off
+functrace       off
+hashall         on
+histexpand      on
+history         on
+ignoreeof       off
+interactive-comments    on
+keyword         off
+monitor         on
+noclobber       off
+noexec          off
+noglob          off
+nolog           off
+notify          off
+nounset         off
+onecmd          off
+physical        off
+pipefail        off
+posix           off
+privileged      off
+verbose         off
+vi              off
+xtrace          off
+
+
+murti@murti:~$ set +o
+set +o allexport
+set -o braceexpand
+set -o emacs
+set +o errexit
+set +o errtrace
+set +o functrace
+set -o hashall
+set -o histexpand
+set -o history
+set +o ignoreeof
+set -o interactive-comments
+set +o keyword
+set -o monitor
+set +o noclobber
+set +o noexec
+set +o noglob
+set +o nolog
+set +o notify
+set +o nounset
+set +o onecmd
+set +o physical
+set +o pipefail
+set +o posix
+set +o privileged
+set +o verbose
+set +o vi
+set +o xtrace
+
+// to enable certain feature from above (for example errexit) we use
+set -o errexit
+// to disable it 
+set +o errexit
+
+// enable xtrace mode (it add information after each command about what is going to be excuted)
+murti@murti:~$ set -x
+murti@murti:~$ hostname
++ hostname
+murti
+murti@murti:~$ ls -al
++ ls --color=auto -al
+total 40
+drwxr-x--- 5 murti murti 4096 Jan  9 22:02 .
+drwxr-xr-x 3 root  root  4096 Jan  9 19:58 ..
+
+// disable the xtrace
+murti@murti:~$ set +x
++ set +x
+
+// getting help
+murti@murti:~$ help | less
+
+// getting help for (cd) command
+murti@murti:~$ help cd | less
+
+// getting help for external commands (ls for example)
+murti@murti:~$ ls --help
+
+// quick search in man 
+murti@murti:~$ man -k passwd
+chgpasswd (8)        - update group passwords in batch mode
+chpasswd (8)         - update passwords in batch mode
+gpasswd (1)          - administer /etc/group and /etc/gshadow
+grub-mkpasswd-pbkdf2 (1) - generate hashed password for GRUB
+openssl-passwd (1ssl) - compute password hashes
+pam_localuser (8)    - require users to be listed in /etc/passwd
+passwd (1)           - change user password
+passwd (1ssl)        - OpenSSL application commands
+passwd (5)           - the password file
+update-passwd (8)    - safely update /etc/passwd, /etc/shadow and /etc/group
+murti@murti:~$ man -k passwd
+chgpasswd (8)        - update group passwords in batch mode
+chpasswd (8)         - update passwords in batch mode
+gpasswd (1)          - administer /etc/group and /etc/gshadow
+grub-mkpasswd-pbkdf2 (1) - generate hashed password for GRUB
+openssl-passwd (1ssl) - compute password hashes
+pam_localuser (8)    - require users to be listed in /etc/passwd
+passwd (1)           - change user password
+passwd (1ssl)        - OpenSSL application commands
+passwd (5)           - the password file
+update-passwd (8)    - safely update /etc/passwd, /etc/shadow and /etc/group
+
+// similar results can be achived using apropos
+murti@murti:~$ apropos passwd
+chgpasswd (8)        - update group passwords in batch mode
+chpasswd (8)         - update passwords in batch mode
+gpasswd (1)          - administer /etc/group and /etc/gshadow
+grub-mkpasswd-pbkdf2 (1) - generate hashed password for GRUB
+openssl-passwd (1ssl) - compute password hashes
+pam_localuser (8)    - require users to be listed in /etc/passwd
+passwd (1)           - change user password
+passwd (1ssl)        - OpenSSL application commands
+passwd (5)           - the password file
+update-passwd (8)    - safely update /etc/passwd, /etc/shadow and /etc/group
+
+// using info 
+murti@murti:~$ info ls
+
+
+
+
