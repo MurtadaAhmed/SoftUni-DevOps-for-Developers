@@ -12,3 +12,85 @@ After that you can see it in docker desktop >> Containers and open it by clickin
 Then stop it and delete it.
 
 // Orchestrate Containers
+1. create docker volume:
+>> docker volume create sqldata
+after that we can see it in Docker Desktop >> Volumes
+2. generate mysql docker image (we can find the password in Homies >> appsettings.json) and run it in cmd:
+>> docker run -e 'ACCEPT_EULA=Y' -e MSSQL_SA_PASSWORD=myStrongPassword12# -p 1433:1433 -v sqldata:/var/opt/mssql/sqlserver --name sqlserver -d mcr.microsoft.com/mssql/server
+after that we can see it in Docker Desktop >> Containers
+3. in the home directory create file "docker-compose.yaml"
+then open the website: https://www.composerize.com/
+put the command that we generate in 2. in the website and copy the generated text in docker-compose.yaml:
+version: '3.8'
+services:
+    sqlserver:
+        environment:
+            - ACCEPT_EULA=Y
+            - MSSQL_SA_PASSWORD=myStrongPassword12#
+        ports:
+            - '1433:1433'
+        volumes:
+            - sqldata:/var/opt/mssql/sqlserver
+        container_name: sqlserver
+        image: mcr.microsoft.com/mssql/server
+    web-app:
+        build:
+            dockerfile: ./Dockerfile
+        ports:
+            - '80:80'
+        container_name: web-app
+        image: homies
+        restart: on-failure
+volumes:
+  sqldata:
+       external: true
+
+4. test it by running in the parent:
+>> docker-compose build
+after it finishes run:
+>> docker-compose up
+after it finishes, you can see it in Docker Desktop >> Containers
+
+5. now we continue with adding to docker-compose.yaml:
+version: '3.8'
+services:
+    sqlserver:
+        environment:
+            - ACCEPT_EULA=Y
+            - MSSQL_SA_PASSWORD=myStrongPassword12#
+        ports:
+            - '1433:1433'
+        volumes:
+            - sqldata:/var/opt/mssql/sqlserver
+        container_name: sqlserver
+        image: mcr.microsoft.com/mssql/server
+        deploy:
+            resources:
+                limits:
+                    cpus: '2'
+                    memory: 2GB
+                              
+    web-app:
+        build:
+            dockerfile: ./Dockerfile
+        ports:
+            - '80:80'
+        container_name: web-app
+        image: homies
+        restart: on-failure
+volumes:
+  sqldata:
+    driver: azure_file
+    driver_opts:
+        share_name: sql-volume
+        storage_account_name: homiesstorageacc
+        
+
+6. azur:
+login to azur:
+>> az login
+create resource group:
+>> az group create --name "demosoftunihomiessrg" --location westeurope
+create container registry:
+>> az acr create --resource-group demosoftunihomiessrg --name demosoftunihomiesscr --sku Basic
+                                                                              
