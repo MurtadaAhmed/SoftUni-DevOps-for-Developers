@@ -66,7 +66,7 @@ services:
         image: mcr.microsoft.com/mssql/server
         deploy:
             resources:
-                limits:
+                reservations:
                     cpus: '2'
                     memory: 2GB
                               
@@ -93,4 +93,30 @@ create resource group:
 >> az group create --name "demosoftunihomiessrg" --location westeurope
 create container registry:
 >> az acr create --resource-group demosoftunihomiessrg --name demosoftunihomiesscr --sku Basic
-                                                                              
+Renaming the image:
+>> docker tag homies demosoftunihomiesscr.azurecr.io/homies
+
+7. put demosoftunihomiesscr.azurecr.io/homies as image in the web-app in docker-compose.yaml
+
+8. pushing it to the docker hub:
+>> az acr login --name demosoftunihomiesscr.azurecr.io/homies 
+>> docker push demosoftunihomiesscr.azurecr.io/homies
+
+9. create context
+>> docker context create aci homiescontext
+>> (selecte a resoruce group) >> demosoftunihomiessrg 
+>> docker context use homiescontext
+To show it use:
+>> docker context show
+
+
+10. NOTE: to have a domain (instead of ip) in the azure, you need to add this in docker-compose.yaml in the web-app section:
+domainname: demosoftunihomies
+
+
+11. run:
+docker-compose up -d
+
+
+
+
