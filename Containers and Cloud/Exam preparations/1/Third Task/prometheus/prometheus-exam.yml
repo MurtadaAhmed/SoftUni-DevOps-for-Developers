@@ -1,0 +1,27 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s # for the alertmanager
+
+rule_files:
+  - alert-rules-exam.yml # Path to alert-rules-exam.yml for the alert manager
+
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      - localhost:9093 # Alert manager address
+
+scrape_configs:
+  - job_name: "backbox"
+    metrics_path: /probe
+    static_configs:
+      - targets: 
+        - https://www.google.com # Target URL
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 127.0.0.1:9115
+

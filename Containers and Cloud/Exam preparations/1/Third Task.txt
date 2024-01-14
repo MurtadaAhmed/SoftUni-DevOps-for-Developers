@@ -1,0 +1,117 @@
+1. in cmd run while docket desktop is open:
+>> docker run -p 9115:9115 quay.io/prometheus/blackbox-exporter
+sometimes we need to run this command before the one above to not run it in azure context:
+>> docker context use default
+2. in C:\Program Files (x86)\prometheus open create a new file:
+prometheus-exam.yml
+with the following contents:
+
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: "backbox"
+    metrics_path: /probe
+    static_configs:
+      - targets: 
+        - https://www.google.com # Target URL
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 127.0.0.1:9115
+
+
+3. in cmd inside the folder C:\Program Files (x86)\prometheus run:
+prometheus.exe --config.file prometheus-exam.yml
+
+4. now the report can be accessed at:
+http://localhost:9090
+from Status >> Targets we can see the report
+
+5. in C:\Program Files (x86)\alertmanager create new file:
+alertmanager-exam.yml
+with the following contents:
+
+route:
+  group_by: ['alertname']
+  group_wait: 30s
+  group_interval: 1m
+  repeat_interval: 1h
+  receiver: 'web.hook'
+receivers:
+  - name: 'web.hook'
+    webhook_configs:
+      - url: 'https://webhook.site/18c9f2ac-995f-4f84-a6c1-8e1b78de2cee' # can get the url from webhook.site
+
+6. start the alertmanager:
+alertmanager.exe --config.file alertmanager-exam.yml
+
+7. the report can be accessed at:
+http://localhost:9093
+
+8. in C:\Program Files (x86)\prometheus create the following file:
+alert-rules-exam.yml
+
+with the following contents:
+
+groups:
+  - name: Connection was slow
+    rules:
+      - alert: SlowConnection
+        expr: probe_http_duration_seconds{phase="connect"} > 0.001
+        for: 3s
+        labels:
+          severity: warning
+        annotations:
+          summary: "Connection tool more than 0.1 milliseconds"
+
+
+9. restart prometheus:
+prometheus.exe --config.file prometheus-exam.yml
+
+10. now from prometheus http://localhost:9090 select Graph and put the following in the exeute filed and press Execute:
+probe_http_duration_seconds
+
+11. alermanager rules to to be added in prometheus-exam.yml:
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s # for the alertmanager
+
+rule_files:
+  - alert-rules-exam.yml # Path to alert-rules-exam.yml for the alert manager
+
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      - localhost:9093 # Alert manager address
+
+
+12. now we can see the alert in http://localhost:9090 selects Alerts
+
+13. open grafana: http://localhost:3000
+Connections >> Add new connection >> Prometheus >> Add new data source
+server url: http://localhost:9090
+Save & test
+
+Then select Dashboards >> New >> New dashboard >> Add Visualization >> Prometheus
+Then on the right upper side click on Time series and select Histogram
+After that from below right side click on Select metric then type:
+probe_http_duration_seconds
+then click >> Run queries
+then save it and then export it as json from the share icon on the top to the left side
+
+
+
+
+
+
+
+
+
+
+
