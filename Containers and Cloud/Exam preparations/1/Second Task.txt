@@ -1,0 +1,107 @@
+1. create Terraform folder in the parent folder.
+2. create main.tf inside the Terraform folder an write inside it:
+terraform {
+    required_providers {
+        azurerm = {
+            source = "hashicorp/azurerm"
+            version = "=3.0.0"
+        }
+    }
+}
+
+provider "azurerm" {
+    features {}
+}
+
+resource "azure_resource_group" "rg" {
+    name = "DimoHomiesRG"
+    location = "West Europe"
+}
+
+3. inside Terraform folder use terminal to start terraform (terraform should be already installed):
+>> terraform init
+>> terraform fmt
+>> terraform validate
+
+4. adding service plan, linux web app, mssql server mssql database, firewall and service source control to the main.tf:
+resource "azure_service_plan" "asp" {
+  name     = "HomiesServicePlan"
+  resource_group_name = azure_resource_group.rg.name
+  location = azure_resource_group.rg.location
+  os_type = "Linux"
+  sku_name = "F1"
+}
+
+resource "azure_linux_web_app" "alwa" {
+    name = "LinuxWebApp"
+    resource_group_name = azure_resource_group.rg.name
+    location = azure_resource_group.rg.location
+    service_plan_id = azure_service_plan.asp.id
+
+    connection_string {
+        name = "DeafultConnection"
+        type = "SQLAzure"
+        value = "Data Source=tcp: ....... " /// to be filled
+    }
+
+    site_config {
+        application_stack {
+            dotnet_version = "6.0"
+        }
+        always_on = false
+    }
+}
+
+resource "azurerm_mssql_server" "sqlserver" {
+  name                         = "mssqlserver"
+  resource_group_name          = azurerm_resource_group.rg.name
+  location                     = azurerm_resource_group.rg.location
+  version                      = "12.0"
+  administrator_login          = "missadministrator"
+  administrator_login_password = "myStrongPassword12#"
+
+}
+
+resource "azurerm_mssql_database" "database" {
+  name           = "example-db"
+  server_id      = azurerm_mssql_server.sqlserver.id
+  collation      = "SQL_Latin1_General_CP1_CI_AS"
+  license_type   = "LicenseIncluded"
+  max_size_gb    = 2
+  sku_name       = "S0"
+  zone_redundant = false
+}
+
+resource "azurerm_mssql_firewall_rule" "firewall" {
+  name             = "FirewallRule1"
+  server_id        = azurerm_mssql_server.sqlserver.id
+  start_ip_address = "0.0.0.0"
+  end_ip_address   = "0.0.0.0"
+}
+
+resource "azurerm_app_service_source_control" "example" {
+  app_id   = azurerm_linux_web_app.alwa.id
+  repo_url = "https://github.com/Azure-Samples/python-docs-hello-world" // to be changed to the repo link of the project Homies in github
+  branch   = "main"
+  use_manual_integration = true
+}
+
+
+5. run the commands:
+>> terraform fmt
+>> terraform validate
+
+
+6. separate configuration to multiple files and then change the names into variables (var.something) in the main.tf
+
+6. run the commands:
+>> terraform fmt
+>> terraform validate
+>> terraform apply -var-file="values.tfvars"
+when it asks to perdom the actions type yes
+>> yes
+
+
+
+
+
