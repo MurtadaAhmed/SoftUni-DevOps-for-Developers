@@ -1,2 +1,6 @@
 .vs/
 *.cs
+*.cache
+*.editorconfig
+*.cs
+*.cache
