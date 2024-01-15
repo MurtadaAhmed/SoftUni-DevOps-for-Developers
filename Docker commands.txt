@@ -1,6 +1,5 @@
-1. Create a Simple Python Application:
-# app.py
-print("Hello, Docker!")
+1. Create a Simple page:
+index.html
 
 2.Create a Dockerfile:
 nano Dockerfile
@@ -52,7 +51,22 @@ docker rmi image_name
 12. force remove image:
 docker rmi -f image_name
 
-
 13. remove all the stopped containers, not used networks, all images, all build cache:
 docker system prune -a
 
+14. remove all stopped containers
+docker container prune
+
+15. create docker-compose.yml with the following contents:
+version: '3'
+services:
+  mypythonapp:
+    build: .
+    ports:
+      - "8080:8080"
+
+16. Build and Run with Docker Compose:
+sudo apt install docker-compose
+docker-compose up
+
+The project can be started now on http://serve_ip_address:8080/
