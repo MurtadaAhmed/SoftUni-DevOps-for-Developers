@@ -1,0 +1,58 @@
+1. Create a Simple Python Application:
+# app.py
+print("Hello, Docker!")
+
+2.Create a Dockerfile:
+nano Dockerfile
+
+with the following content:
+
+# Use an official Python runtime as a parent image
+FROM python:3.8-slim
+
+# Set the working directory to /app
+WORKDIR /app
+
+# Copy app.py into the container at /app
+COPY app.py .
+
+# Run app.py when the container launches
+CMD ["python", "app.py"]
+
+3. Build the Docker Image:
+docker build -t mypythonapp .
+
+4. confirm if the file correctly copied in the app
+docker run -it mypythonapp /bin/bash
+ls 
+
+you should see app.py there.
+
+5.Run the Docker Container:
+docker run mypythonapp
+
+6. View running containers: 
+docker ps
+
+7. View all containers (including stopped ones): 
+docker ps -a
+
+8. Stop a running container (you can get the container id from the previous step): 
+docker stop container_id
+
+9. Remove a container: 
+docker rm container_id
+
+10. View images: 
+docker images
+
+11. remove image:
+docker rmi image_name
+
+12. force remove image:
+docker rmi -f image_name
+
+
+13. remove all the stopped containers, not used networks, all images, all build cache:
+docker system prune -a
+
