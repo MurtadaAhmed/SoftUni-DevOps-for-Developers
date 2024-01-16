@@ -1,0 +1,14 @@
+>> sudo -s
+>> apt install npm
+>> npm install -g @vue/cli
+Then restart the terminal
+>> npm i -g @vue/cli-init
+>> vue init browserify MyWebsite
+>> cd MyWebsite
+>> npm install
+>> docker pull node:16
+>> nano nano package.json
+in the script section change localhost to 0.0.0.0
+>> npm run dev
+Run it with docker:
+>> docker run -it -p 8080:8080 -v ${PWD}:/app -w /app node:16 npm run serve
