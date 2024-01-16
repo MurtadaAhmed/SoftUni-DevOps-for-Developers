@@ -1,0 +1,44 @@
+- Repository image: https://hub.docker.com/r/nginxdemos/hello
+>> docker pull nginxdemos/hello
+>> docker images
+
+>> docker run nginxdemos/hello
+or
+>> docker run -d nginxdemos/hello    # in detached mode
+af313967b1fe5f9ff72878d629ebb679a81da3354363698507564ae730859573 
+>> docker ps
+
+>> docker stop af31
+
+start with name:
+>> docker run -d --name democontainer nginxdemos/hello                               
+865b96432d6f1b2a022fd782e2f360e0abf2aa00d2445024419b21bed86da737 
+>> docker stop democontainer                                                         
+democontainer  
+
+to access it on port 5000:
+>> docker run -d --name DEMO -p 5000:80 nginxdemos/hello  
+
+now can be accessed at http://localhost:5000/
+
+to check the logs:
+>> docker logs DEMO
+>> docker logs DEMO -f  # in runtime
+
+to access the container:
+>> docker exec -it DEMO /bin/sh  # where we can linux commands
+>> exit
+
+to force delete the container:
+>> docker rm DEMO2 -f 
+
+to map to folder:
+>> docker run -d --name DEMO -p 5000:80 -v C:\Users\Murti\test:/app  nginxdemos/hello 
+
+to create a volume:
+>> docker volume create myvolume 
+>> docker volume ls  
+>> docker volume inspect myvolume
+>> docker run -d --name DEMO -p 5000:80 -v myvolume:/app  nginxdemos/hello 
+
+>> docker volume rm myvolume  

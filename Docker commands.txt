@@ -64,4 +64,3 @@ docker-compose up
 
 The project can be started now on http://serve_ip_address:8080/
 
-
