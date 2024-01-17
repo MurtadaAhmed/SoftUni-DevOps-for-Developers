@@ -1,0 +1,9 @@
+>> docker pull mongo
+>> docker run -p 27017:27017 -v ${PWD}/data:/etc/mongo -d -e MONOG_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=mongoadminpass mongo
+
+create volume
+>> docker run -p 27017:27017 -v data:/etc/mongo -d -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=mongoadminpass mongo
+
+in mogoDB Compass connect using (replace 172.19.139.179 with the actual ip of the server): 
+mongodb://mongoadmin:mongoadminpass@172.19.139.179:27017/?authMechanism=DEFAULT
+
