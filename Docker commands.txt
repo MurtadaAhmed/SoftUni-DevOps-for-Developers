@@ -64,3 +64,93 @@ docker-compose up
 
 The project can be started now on http://serve_ip_address:8080/
 
+******************
+Networks:
+1. Bridge network (between two containers)
+// create bridge network:
+docker network create demo-network -d bridge
+
+// create a new container and attach it to the created network:
+docker run -it --rm --name container1 --network demo-network busybox:latest
+
+// creating a second container in another terminal:
+docker run -it --rm --name container2 busybox:latest
+
+// join the second container to the same network:
+docker network connect demo-network container2
+
+// now in the first terminal (with container1) type:
+ping container2
+
+
+2. Host network
+// run nginx on docker using the network host:
+docker run -d --name nginx --network host nginx:latest
+
+// check if the nginx server is accessible on port 80:
+curl localhost:80
+
+3. Disable a network:
+// set network to none
+docker run -it --rm --network none busybox:latest
+
+// ping (it should show bad address 'google.com')
+ping google.com
+
+4. Remove container from a network:
+docker network disconnect demo-network container2
+
+5. Managing networks:
+// list all the docker networks:
+docker network ls
+
+// remove certain network:
+docker network rm demo-network
+
+// delete all unused networks:
+docker network prune
+
+6. Netowrks in docker compose:
+// docker-compose.yml automatically create a newtork:
+******
+version: "3"
+services:
+  app:
+    image: php:7.2-apache
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: changeme
+******
+
+// after saving the file above run it with:
+docker compose up -d
+
+// check the automatic created network:
+docker network ls
+
+// connect to the current contianer app and try to ping the mysql:
+docker compose exec -it app bash // opens the bash 
+apt update && apt install iputils-ping -y // installs ping
+ping mysql
+
+// We can also add networks in docker-compose.yml file:
+**********
+version: "3"
+services:
+
+  app:
+    image: php:7.2-apache
+    networks:
+      - db
+  helper:
+    image: custom-image:latest
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: changeme
+    networks:
+      - db
+networks:
+  db:
+**********
