@@ -32,6 +32,9 @@ docker ps -a
 8. Stop a running container (you can get the container id from the previous step): 
 docker stop container_id
 
+// to stop all the running containers:
+docker stop $(docker ps -q)
+
 9. Remove a container: 
 docker rm container_id
 

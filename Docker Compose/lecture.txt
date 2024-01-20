@@ -1,0 +1,35 @@
+1. create Dockerfile
+2. build image the dockerfile with:
+>> docker build -t demodocker .
+3. find the image by running:
+>> docker images
+4. run the image with:
+>> docker run -it demodocker
+5. see the exit docker container with:
+>> docker ps -a
+
+
+// to upload image to docker hub:
+1. create token from docker hub and login via the terminal:
+My account >> Security >> New Access token
+
+in the terminal type:
+>> docker login
+username: enter the username
+password: enter the copied token (ctrl + shift + v)
+
+2. build the image using the correct naming (username/dockerimagename):
+docker build -t murtadoc/demodocker .
+
+3. push the image:
+docker push murtadoc/demodocker
+
+4. to pull the image from dockerhum to the local machine:
+docker pull murtadoc/demodocker
+
+// docker compose:
+1. create docker-compose.yml file
+2. check if the file is written correctly:
+docker-compose build 
+3. run docker compose file:
+docker compose up
