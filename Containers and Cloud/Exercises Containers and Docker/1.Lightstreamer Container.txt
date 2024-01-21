@@ -1,0 +1,6 @@
+1. pull the image
+docker pull lightstreamer:latest 
+2. run the docker (docker_id can be taken from >> docker ps)
+docker run --name ls-server -p 80:8080 -d docker_id
+3. the container can be accessed on:
+localhost
