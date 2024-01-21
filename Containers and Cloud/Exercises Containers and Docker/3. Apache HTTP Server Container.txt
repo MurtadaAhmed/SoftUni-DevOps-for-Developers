@@ -1,0 +1,2 @@
+docker run --name my-apache-app -p 8080:80 -d -v ${PWD}:/usr/local/apache2/htdocs/ httpd:latest
+
