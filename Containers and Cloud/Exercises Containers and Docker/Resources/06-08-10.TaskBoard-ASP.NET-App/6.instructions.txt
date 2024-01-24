@@ -5,7 +5,7 @@ The Dockerfile will be created inside the folder TaskBoard.WebApp
 using CLI (Linux on Windows) navigate to:
 /mnt/c/  # this is the C drive in windows
 find the parent of the folder TaskBoard.WebApp and run inside it:
->> r build . -f ./TaskBoard.WebApp/Dockerfile -t murtadoc/t
+>> docker build . -f ./TaskBoard.WebApp/Dockerfile -t murtadoc/t
 askboard_app
 murtadoc here is the username of the docker hub
 4. login to docker hub
