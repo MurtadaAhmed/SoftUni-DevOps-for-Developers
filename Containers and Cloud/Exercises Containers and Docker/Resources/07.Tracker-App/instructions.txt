@@ -1,0 +1,6 @@
+1. build image
+docker build -t murtadoc/tracker .
+2. push image
+docker push murtadoc/tracker
+3. run the docker
+docker run --name tracker_app -d -p 8883:80 murtadoc/tracker
