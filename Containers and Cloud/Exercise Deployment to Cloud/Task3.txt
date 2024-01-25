@@ -1,0 +1,18 @@
+1. Azure portal >> create a resource >> containers >> container instances
+Image source >> Other registry
+Image: nginxdemos/hello
+
+>> Next: Networking:
+DNS name label: nginx-server
+Tenant
+
+>> Review + Create >> create 
+
+2. Container instances >> nginx-server-container
+the server url is under FQDN:
+nginx-server.f0hqcte8epgmh5f9.westeurope.azurecontainer.io
+
+if there is any issue, from the left side select Containers >> Logs
+
+The container can be deleted from Overview >> delete
+or delete the resorce group 
