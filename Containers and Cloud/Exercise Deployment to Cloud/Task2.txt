@@ -1,0 +1,37 @@
+1. create repository on github and upload the files
+https://github.com/MurtadaAhmed/todoappdemo
+https://github.com/MurtadaAhmed/todoappdemo.git
+2."Web app + databae" from Azure
+- Runtime stack : Node 18
+- Engine CosmosDB
+ACC NAME todoappdemomurti-server
+databae NAME: todoappdemomurti-database
+- Hosting plan: basic
+3. open the resource with type app service >> configuration 
+>> Application setting >> add application setting
+Name: DATABASE_NAME
+Value: todoappdemomurti-database
+click Save after that
+
+>> Application setting >> 
+AZURE_COSMOS_CONNECTIONSTRING
+mongodb://todoappdemomurti-server:VclIdgH6yKgsnTEpl3xmwvlyL7d799mbGryoTU9wJYv2BW8V9pQMk06uwruMO2RrsOGVnkg6WM3kACDbGdsmZg==@todoappdemomurti-server.mongo.cosmos.azure.com:10255/todoappdemomurti-database?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@todoappdemomurti-server@
+
+>> Application setting >> add application setting
+Name: DATABASE_URL
+Value: mongodb://todoappdemomurti-server:VclIdgH6yKgsnTEpl3xmwvlyL7d799mbGryoTU9wJYv2BW8V9pQMk06uwruMO2RrsOGVnkg6WM3kACDbGdsmZg==@todoappdemomurti-server.mongo.cosmos.azure.com:10255/todoappdemomurti-database?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@todoappdemomurti-server@
+click Save after that
+
+4. Deployment Center
+Source: github
+Authenticate
+Organization
+repository
+Branch
+Azure for Students
+Identity
+
+click Save after that
+In the github repository >> Action we can see there pme workflow created
+
+After the deployment is finished, it can be accessed on todoappdemomurti.azurewebsites.net
