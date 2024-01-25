@@ -1,0 +1,13 @@
+1. search "wordpress on app services"
+2. create resource group
+3. choose europian region
+4.create username and password
+5. click review and create
+6. select the resource from the resource group >> select the one with type app services
+7. access the link of the website
+8. can see the database username and database password from the configuration tab on the left
+obyeqcdfpi
+SW478DV47E0247J2$
+9. https://wordpressdemoaoftuni.azurewebsites.net/wp-admin
+10.https://wordpressdemoaoftuni.azurewebsites.net/phpmyadmin/
+11. delete the resource group
