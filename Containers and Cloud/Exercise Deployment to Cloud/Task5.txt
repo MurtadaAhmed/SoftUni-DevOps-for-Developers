@@ -1,0 +1,37 @@
+PS >> $ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi; Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'; rm .\AzureCLI.msi
+it will tale few minutes to be installed 
+after that restart the shell
+
+navigate to tracker app and run:
+>> docker build -t tracker-app-image .
+>> docker images
+>> docker run -d -p 80:80 tracker-app-image
+
+login to azure through Azure CLI:
+>> az login 
+
+create a new resource group
+>> az group create --name murtitrackergroup --location westeurope
+
+create azure container registry:
+>>  az acr create --resource-group murtitrackergroup --name trackercontainerregistry --sku Basic
+
+login to the container registry:
+>> az acr login --name trackercontainerregistry
+
+get the full login server name
+>> az acr show --name trackercontainerregistry  --query loginServer --output table
+Result                                     
+trackercontainerregistry.azurecr.io
+
+tag the image created previously with the login server of the container registry:
+>> docker tag tracker-app-image trackercontainerregistry.azurecr.io/tracker-app-image
+
+push the new image to Azure Container Registry:
+>> docker push trackercontainerregistry.azurecr.io/tracker-app-image
+
+list the images in the container registry:
+>> az acr repository list --name trackercontainerregistry 
+
+on Azure portal confirm the repository creation:
+Resource group >> select the resouce group >> select the container registry >> Repositories 
