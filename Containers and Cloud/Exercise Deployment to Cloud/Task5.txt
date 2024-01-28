@@ -35,3 +35,29 @@ list the images in the container registry:
 
 on Azure portal confirm the repository creation:
 Resource group >> select the resouce group >> select the container registry >> Repositories 
+
+Deploy a Container Application 
+create and configure azure active directory service principal:
+>> $ACR_NAME='trackercontainerregistry'
+>> $SERVICE_PRINCIPAL_NAME='crmurtiserviceprincipal'
+>> $ACR_REGISTRY_ID=$(az acr show --name $ACR_NAME --query "id" --output tsv)
+>> $PASSWORD=$(az ad sp create-for-rbac --name $SERVICE_PRINCIPAL_NAME --scopes $ACR_REGISTRY_ID --role acrpull --query "password" --output tsv)
+>> $USER_NAME=$(az ad sp list --display-name $SERVICE_PRINCIPAL_NAME --query "[].appId" --output tsv)
+>> echo "Service principal ID: $USER_NAME"
+00d505c2-b685-48ad-9bda-01f9e7751fc8
+>> echo "Service principal password: $PASSWORD"
+lym8Q~OdZpvJ4fNdC_V8SrkP1wKbG3vExlTiZc.c
+
+>> az container create --resource-group murtitrackergroup --name container --image trackercontainerregistry.azurecr.io/tracker-app-image --cpu 1 --memory 1 --registry-login-server trackercontainerregistry.azurecr.io --registry-username 00d505c2-b685-48ad-9bda-01f9e7751fc8 --registry-password lym8Q~OdZpvJ4fNdC_V8SrkP1wKbG3vExlTiZc.c --ip-address Public --dns-name-label mynewdns --ports 80
+
+the container can now be access using FQDN:
+resource groups >> group name >> select the container (has type Container Instances) >> FQDN: mynewdns.westeurope.azurecontainer.io
+
+view that state of deployment:
+>> az container show --resource-group <resource-group-name> --name <container-name> --query instanceView.state
+The result is: "Running"
+
+display container's domain name:
+az container show --resource-group <resource-group-name> --name <container-name> --query ipAddress.fqdn
+The result is: "mynewdns.westeurope.azurecontainer.io"
+
