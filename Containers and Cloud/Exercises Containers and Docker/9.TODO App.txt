@@ -1,0 +1,19 @@
+1. in this directory 09.TODO-App\backend:
+>> docker build -t backend .
+2. in this directory 09.TODO-App\frontend:
+>> docker build -t frontend .
+3.
+>> docker pull mongo
+4. create two networks:
+>> docker network create react-express
+>> docker network create express-mongo
+5. start running the images with their respective networks:
+>> docker run -d --name frontend -p 3000:3000 --network react-express frontend
+>> docker run -d --name backend --network react-express backend
+>> docker run -d --name mongodb -v ./data:/data/db --network express-mongo mongo
+6. connect the backend ot express-mongo network as well:
+>> docker network connect express-mongo backend
+
+7. check if the containers are attached to the correct network:
+>> docker network inspect express-mongo
+>> docker network inspect react-express
