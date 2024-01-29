@@ -1,0 +1,53 @@
+1. install java and maven as per the instructions
+2. inside the task  directory 12.Reseller-App/ run:
+>> mvn clean package -DskipTests
+3. create docker file in the main directory:
+********
+FROM openjdk:11-jre-slim
+LABEL maintainer="Reseller App"
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} app.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","/app.jar"]
+********
+4. build the image:
+docker build -t resellerapp .
+5. create docker-compose.yml file 
+********
+version: '3'
+services:
+  resellerapp:
+    image: resellerapp
+    ports:
+      - "8000:8080"
+    depends_on:
+      - mysql
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/resellerdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=my-secret-pw 
+    networks:
+      - backend
+  mysql:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=my-secret-pw
+      - MYSQL_DATABASE=resellerdb
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=userpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - backend
+networks:
+  backend:
+volumes:
+  mysql-data:
+**************
+6. build docker compose:
+docker-compose build
+7. run the docker compose:
+docker-compose up -d 
+The url can be accessed now on http://localhost:8000/ (in the instructions file they put the url 8080, but had to change it in docker compose to 8000, as 8080 is not working)
