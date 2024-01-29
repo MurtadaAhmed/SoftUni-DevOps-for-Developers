@@ -11,7 +11,7 @@
 -d mcr.microsoft.com/mssql/server
 
 3. create and connect a taskboard app container
-a. edit tjhe appsettings.json by adding the database information:
+a. edit the appsettings.json by adding the database information:
 "DefaultConnection": "Server=sqlserver;Database=MyDB;User Id=sa;Password=yourStrongPassword12#;MultipleActiveResultSets=true;"
 b.build the image again
 >> docker build . -f ./TaskBoard.WebApp/Dockerfile -t murtadoc/taskboard_app

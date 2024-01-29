@@ -1,0 +1,11 @@
+1. in this folder 06-08-10.TaskBoard-ASP.NET-App/ run:
+>> docker build -f .\TaskBoard.WebApp\Dockerfile -t taskboard .
+
+2. in the same folder create file docker-compose.yml
+
+3. run:
+docker compose build
+
+4. run the docker compose to run both of the containers incluided in it:
+docker compose up
+
