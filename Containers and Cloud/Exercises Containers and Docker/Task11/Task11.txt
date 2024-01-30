@@ -1,0 +1,132 @@
+1. in the terminal
+>> docker pull postgres
+>> docker pull redis
+
+2. create the networks:
+>> docker network create backend
+>> docker network create frontend
+
+3. create the volumes:
+>> docker volume create db
+>> docker volume create vote
+>> docker volume create result
+
+4. build the result dockerfile:
+>> cd result
+>> docker build -t result .
+
+5. write the Dockerfile for vote:
+******
+# Using official python runtime base image
+FROM python:3.9-slim
+# Set the application directory
+WORKDIR /app
+
+# Install our requirements.txt
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# Copy our code from the current folder to /app inside the container
+COPY . .
+
+# Make port 80 available for links and/or publish
+EXPOSE 80
+
+# Define our command to be run when launching the container
+ENTRYPOINT [ "python", "app.py" ]
+******
+
+Run:
+>> docker build -t vote .
+
+6. create Dockerfile for worker:
+*****
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 as builder
+
+# Create a working directory
+WORKDIR /app
+# Copy the .csproj file and restore
+COPY src/Worker/Worker.csproj .
+RUN dotnet restore
+# Copy source files to the image
+COPY src/Worker .
+# Build the project
+RUN dotnet publish Worker.csproj -c Release -o /app/build
+# Specify app image
+FROM mcr.microsoft.com/dotnet/core/runtime:3.1
+# Specify working directory for this stage
+WORKDIR /app
+# Tell Docker what command to run when our image is executed inside a container
+    ENTRYPOINT [ "dotnet", "Worker.dll" ]
+# Copy the /out directory from the build stage into the runtime image
+COPY --from=builder /app/build /app/
+*********
+
+Run:
+>> docker build -t worker .
+
+7. run the images and connect them to the respective network:
+>> docker run -d --name vote --network frontend -p 5000:80 -v vote:/app vote
+>> docker network connect backend vote
+
+>> docker run -d --name result --network frontend -p 5001:80 -v result:/app result
+>> docker network connect backend result
+
+>> docker run -d --name worker --network backend worker
+
+>> docker run -d --name redis --network backend redis
+
+>> docker run -d --name db --network backend -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -v db:/var/lib/postgresql/data postgres
+
+8. make docker-compose.yml
+*****
+version: '3.8'
+services:
+  vote:
+    networks:
+      - frontend
+      - backend
+    ports:
+      - 5000:80
+    volumes:
+      - vote:/app
+    image: vote
+  result:
+    networks:
+      - frontend
+      - backend
+    ports:
+      - 5001:80
+    volumes:
+      - result:/app
+    image: result
+  worker:
+    networks:
+      - backend
+    image: worker
+  redis:
+    networks:
+      - backend
+    image: redis
+  db:
+    networks:
+      - backend
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - db:/var/lib/postgresql/data
+    image: postgres
+
+networks:
+  frontend:
+  backend:
+volumes:
+  vote:
+  result:
+  db:
+******
+
+9. run:
+>> docker compose build
+>> docker compose up -d
