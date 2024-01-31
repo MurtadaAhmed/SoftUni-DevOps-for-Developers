@@ -1,0 +1,46 @@
+1. create terraform .tf file.
+2. write the file contents:
+*****
+terraform {
+  required_providers {
+    docker = {
+      source = "kreuzwerker/docker"
+      version = "~> 3.0.1"
+    }
+  }
+  
+}
+provider "docker" {
+    host = "npipe:////.//pipe//docker_engine"
+  }
+
+resource "docker_image" "nginx" {
+    name = "nginxdemos/hello"
+  }
+
+resource "docker_container" "nginx" {
+  image = resource.docker_image.nginx.name
+  name ="nginx_hello"
+    ports {
+        internal = 80
+        external = 8000
+    }
+}
+******
+2. initialize the directory:
+>> terraform init 
+3. format and validate the configuration:
+>> terraform fmt 
+>> terraform validate
+4. create infrastructure:
+>> terraform apply
+and type yes
+5. inspect the current state:
+>> terraform show
+6. update configuration 
+change the external port in .tf file to 5000
+>> terraform apply 
+and type yes
+7. destroy configuration:
+>> terraform destroy
+and type yes
