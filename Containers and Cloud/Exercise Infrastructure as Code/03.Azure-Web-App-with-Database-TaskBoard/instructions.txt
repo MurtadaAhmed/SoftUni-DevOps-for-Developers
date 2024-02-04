@@ -1,11 +1,11 @@
-1. generate the terraform file
-2. 
+1. upload the app to github:
+https://github.com/MurtadaAhmed/terraformtaskboarddemo
+2. create the terraform file
+3.
 >> terraform init
 >> terraform fmt
 >> terraform validate
 >> terraform apply
-type yes
-
 3. in resource groups >> click on resource group name >> click on app service name >> look at:
 - Deployment Center: status of the deployment
 - Default domain: the url of the app
