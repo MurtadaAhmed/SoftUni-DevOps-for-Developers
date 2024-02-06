@@ -12,3 +12,5 @@ https://github.com/MurtadaAhmed/terraformtaskboarddemo
 
 4
 >> terraform destroy
+
+

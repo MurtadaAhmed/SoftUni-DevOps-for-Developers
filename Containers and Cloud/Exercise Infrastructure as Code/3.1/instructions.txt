@@ -1,0 +1,13 @@
+1. create the following files:
+variables.tf : to store the variables
+values.tfvars: to store the values of the variables
+output.tf 
+
+2. use CMD (not the powershell)
+>> terraform init 
+>> az login  
+>> terraform fmt    
+>> terraform validate  
+>> terraform plan -var-file=values.tfvars
+>> terraform apply -var-file=values.tfvars   
+>> terraform destroy -var-file=values.tfvars
