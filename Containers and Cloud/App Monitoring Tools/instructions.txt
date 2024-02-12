@@ -1,0 +1,15 @@
+1. access blackbox exporter using terminal:
+PS C:\Program Files (x86)\blackbox_exporter> .\blackbox_exporter.exe
+
+then it can be accessed on this link >> http://localhost:9115/
+to mmonitor a website >> http://localhost:9115/probe?target=softuni.bg
+or >> http://localhost:9115/probe?target=prometheus.io&module=http_2xx
+
+2. create a prometheus - blackbox.yml file inside:
+C:\Program Files (x86)\prometheus
+then run in the terminal:
+PS C:\Program Files (x86)\prometheus> .\prometheus.exe --config.file .\prometheus-blackbox.yml
+prometheus can now be access using >> http://localhost:9090
+go to Status >> Targets
+also go to Graph >> search with: probe_http_status_code
+
