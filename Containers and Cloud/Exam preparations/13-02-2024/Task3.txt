@@ -1,0 +1,43 @@
+1. access blackbox exporter using the terminal:
+PS C:\Program Files (x86)\blackbox_exporter> .\blackbox_exporter.exe
+access it on>> http://localhost:9115/
+test it >> http://localhost:9115/probe?target=https://softuni.bg
+2. inside promethius folder create a file:
+prometheus-exam.yml
+run it with:
+PS C:\Program Files (x86)\prometheus> .\prometheus.exe --config.file=prometheus-exam.yml
+
+access it on >> http://localhost:9090
+
+3. alert manager:
+visit https://webhook.site and copy "Your unique URL"
+https://webhook.site/b509d203-d35b-4ed1-a856-901d09ea6117
+
+create alertmanager-exam.yml in alertmanager folder and add the webhook.site url there
+
+run it with:
+PS C:\Program Files (x86)\alertmanager> .\alertmanager.exe --config.file=alertmanager-exam.yml
+
+access it on >> http://localhost:9093
+
+4. alert manager configuration:
+- create file status_code.yml in prometheus folder
+- add alert manager configuration in prometheus-exam.yml
+- restart prometheus with:
+PS C:\Program Files (x86)\prometheus> .\prometheus.exe --config.file=prometheus-exam.yml
+- visit http://localhost:9090
+you can see the alert manager under the tab (Alerts)
+
+5. grafana:
+can be accessed on >> http://localhost:3000
+prometheus can be added (if not) from the left side menu >> connections >> Data sources >> prometheus
+prometheus server url: http://localhost:9090
+Save & test
+
+- add dashboard
+from the left side menu >> Dashboards >> New >> New dashboard >> Add visualization >> select prometheus
+- now on the right side click on "Time series" , type in the field Search for ... "Histogram" and select it
+- now from the left lower side (Metric) click on (select metric) and search with (probe_duration_seconds) and select it and then click on (Run queries)
+- Export dashboard:
+click on Apply on upper right side >> click on the share icon in the middle to the left side >> Export tab >> click on "Export for sharing externally" and then (Save to file)
+

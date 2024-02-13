@@ -1,0 +1,1 @@
+APP URL : firsttaskmurti.azurewebsites.net (from default domain in web app)

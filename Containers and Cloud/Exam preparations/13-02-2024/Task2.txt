@@ -1,0 +1,32 @@
+1. create a new repository
+- create a new repository
+- click on " uploading an existing file." to upload the project
+- drag and drop the file contents (you can drag and drp one folder at a time)
+- commit changes
+https://github.com/MurtadaAhmed/examprepdemotask213022024
+
+2. create terraform folder and put inside it:
+main.tf 
+variables.tf 
+values.tfvars 
+outputs.tf 
+
+
+
+after writing the codes inside every file run:
+>> terraform init
+>> terraform fmt
+>> terraform validate
+
+*** We can take the database information from 
+>> SoftuniBaza>> appsettings.json
+"DefaultConnection": "Server=sqlserver;Database=Contacts;User Id=sa;Password=myStrongPassword12#;MultipleActiveResultSets=true;"
+
+3. after writing all the terraform files run USING CMD:
+>> az login
+>> terraform plan -var-file=values.tfvars 
+>> terraform apply -var-file=values.tfvars
+and type yes
+
+
+4. place a screenshot of the app and terraform files in murtadoc-tast-2 folder

@@ -1,0 +1,45 @@
+1. in azure portal search for web app + database
+- create resource group
+- create a unique name
+firsttaskmurti.azurewebsites.net
+- runtime stack: Node 18 LTS
+- Engine: Cosmos DB API for MongoDB
+- Account name and Database name are automatically generated:
+firsttaskmurti-server
+firsttaskmurti-database
+- Hosting plan: Basic
+
+click Review + create and then Create
+
+if you see an error message, make sure the hosting plan is Basic
+
+2. upload the project to github:
+- create a new repository
+- click on " uploading an existing file." to upload the project
+- drag and drop the file contents
+- commit changes
+
+https://github.com/MurtadaAhmed/examprepdemotask113022024
+
+3. open the resource groups >> select the created resouce group >> select the one with the type web app >> Configuration (from left side menu)
+look for (AZURE_COSMOS_CONNECTIONSTRING)
+click on it and copy the value (will be used in the next step below):
+mongodb://firsttaskmurti-server:9hhmeMQbT37VA1NZPjNHDmIn02cTKdJ9P7vssvWecIKfgC5E0TBntYBXb8QgcjFxMFgheGsrfHR1ACDbBOqS3A==@firsttaskmurti-server.mongo.cosmos.azure.com:10255/firsttaskmurti-database?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@firsttaskmurti-server@
+
+after that from the same page click on (new application settins):
+Name: DATABASE_URL (we took this name from the project file .env.sample)
+value: mongodb://firsttaskmurti-server:9hhmeMQbT37VA1NZPjNHDmIn02cTKdJ9P7vssvWecIKfgC5E0TBntYBXb8QgcjFxMFgheGsrfHR1ACDbBOqS3A==@firsttaskmurti-server.mongo.cosmos.azure.com:10255/firsttaskmurti-database?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@firsttaskmurti-server@
+
+After that click on the button (Save)
+
+- Now go Deployment Center (from the left side menu)
+Soure: Github 
+Organization: MurtadaAhmed
+repository: examprepdemotask113022024
+breanch: main
+
+After that clicj on the button (Save)
+
+4. place the screenshots and the url link in the folder (murtadoc-task-1)
+
+5. keep the app running.
