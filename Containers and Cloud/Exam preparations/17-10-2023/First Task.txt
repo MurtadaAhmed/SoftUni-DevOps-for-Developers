@@ -1,0 +1,125 @@
+1. requires .NET SDK version 6.0 to be installed.
+2. open the project in visual studio >> click on the project folder (Homies) under Solution Explorer >> Add >> Docker Support >> Linux
+3. The docker will start loading, you can delete the container and images.
+4. In VS code, save the docker file, then move it from (Homies) folder to the parent directory.
+5. in the parent directory (where the docker file is located) run cmd command:
+>> docker build -t homies .
+6. after that you should see the docker images in Docker desktop app >> images or by running this:
+>> docker images 
+7. you can start the docker using:
+>> docker run -p 80:80 homies 
+After that you can see it in docker desktop >> Containers and open it by clicking the link under the ports column.
+Then stop it and delete it.
+
+// Orchestrate Containers
+1. create docker volume:
+>> docker volume create sqldata
+after that we can see it in Docker Desktop >> Volumes
+2. generate mysql docker image (we can find the password in Homies >> appsettings.json) and run it in cmd:
+>> docker run -e 'ACCEPT_EULA=Y' -e MSSQL_SA_PASSWORD=myStrongPassword12# -p 1433:1433 -v sqldata:/var/opt/mssql/sqlserver --name sqlserver -d mcr.microsoft.com/mssql/server
+after that we can see it in Docker Desktop >> Containers
+3. in the home directory create file "docker-compose.yaml"
+then open the website: https://www.composerize.com/
+put the command that we generate in 2. in the website and copy the generated text in docker-compose.yaml:
+version: '3.8'
+services:
+    sqlserver:
+        environment:
+            - ACCEPT_EULA=Y
+            - MSSQL_SA_PASSWORD=myStrongPassword12#
+        ports:
+            - '1433:1433'
+        volumes:
+            - sqldata:/var/opt/mssql/sqlserver
+        container_name: sqlserver
+        image: mcr.microsoft.com/mssql/server
+    web-app:
+        build:
+            dockerfile: ./Dockerfile
+        ports:
+            - '80:80'
+        container_name: web-app
+        image: homies
+        restart: on-failure
+volumes:
+  sqldata:
+       external: true
+
+4. test it by running in the parent:
+>> docker-compose build
+after it finishes run:
+>> docker-compose up
+after it finishes, you can see it in Docker Desktop >> Containers
+
+5. now we continue with adding to docker-compose.yaml:
+version: '3.8'
+services:
+    sqlserver:
+        environment:
+            - ACCEPT_EULA=Y
+            - MSSQL_SA_PASSWORD=myStrongPassword12#
+        ports:
+            - '1433:1433'
+        volumes:
+            - sqldata:/var/opt/mssql/sqlserver
+        container_name: sqlserver
+        image: mcr.microsoft.com/mssql/server
+        deploy:
+            resources:
+                reservations:
+                    cpus: '2'
+                    memory: 2GB
+                              
+    web-app:
+        build:
+            dockerfile: ./Dockerfile
+        ports:
+            - '80:80'
+        container_name: web-app
+        image: homies
+        restart: on-failure
+volumes:
+  sqldata:
+    driver: azure_file
+    driver_opts:
+        share_name: sql-volume
+        storage_account_name: homiesstorageacc
+        
+
+6. azur:
+login to azur:
+>> az login
+create resource group:
+>> az group create --name "demosoftunihomiessrg" --location westeurope
+create container registry:
+>> az acr create --resource-group demosoftunihomiessrg --name demosoftunihomiesscr --sku Basic
+Renaming the image:
+>> docker tag homies demosoftunihomiesscr.azurecr.io/homies
+
+7. put demosoftunihomiesscr.azurecr.io/homies as image in the web-app in docker-compose.yaml
+
+8. pushing it to the docker hub:
+>> az acr login --name demosoftunihomiesscr.azurecr.io/homies 
+>> docker push demosoftunihomiesscr.azurecr.io/homies
+
+you can see it in resource groups >> select the resoruce group >> select the container registry >> select "Repositories" from the left side menu
+
+9. create context
+>> docker context create aci homiescontext
+>> (selecte a resoruce group) >> demosoftunihomiessrg 
+>> docker context use homiescontext
+To show it use:
+>> docker context show
+
+
+10. NOTE: to have a domain (instead of ip) in the azure, you need to add this in docker-compose.yaml in the web-app section:
+domainname: murtadoc
+
+
+11. run:
+docker-compose up -d
+
+12. the url can be accessed using the domain name:
+http://murtadoc.westeurope.azurecontainer.io/
+this domain can be found in Resources groups >> select the resource group >> select the container instance >> FQDN: murtadoc.westeurope.azurecontainer.io
+
