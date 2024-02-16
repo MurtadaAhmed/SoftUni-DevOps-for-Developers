@@ -1,0 +1,17 @@
+1. create a respository in github:
+https://github.com/MurtadaAhmed/watchlistexamprep
+2. create the 4 terraform files
+while crying the files use:
+>> terraform init (just one time)
+>> terraform fmt
+>> terraform validate
+
+3. login in azure
+>> az login
+NOW USE CMD:
+>> terraform plan -var-file=values.tfvars
+>> terraform apply -var-file=values.tfvars
+
+4. wait for the deployment to finish and then check the url from:
+resource groups >> select the resource group >> select the app service type >> 
+Default domain watchlist-alwa.azurewebsites.net
