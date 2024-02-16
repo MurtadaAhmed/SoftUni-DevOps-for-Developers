@@ -97,6 +97,7 @@ resource "azurerm_app_service_source_control" "example" {
 6. run the commands:
 >> terraform fmt
 >> terraform validate
+>> terraform plan -var-file=values.tfvars 
 >> terraform apply -var-file="values.tfvars"
 when it asks to perdom the actions type yes
 >> yes
