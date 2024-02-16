@@ -11,38 +11,37 @@ provider "azurerm" {
   features {}
 }
 
-resource "azure_resource_group" "rg" {
+resource "azurerm_resource_group" "rg" {
   name     = var.resource_group_name
   location = var.resource_group_location
 }
 
 
-resource "azure_service_plan" "asp" {
-  name     = var.app_service_plan_name
-  resource_group_name = azure_resource_group.rg.name
-  location = azure_resource_group.rg.location
-  os_type = "Linux"
-  sku_name = "F1"
+resource "azurerm_service_plan" "asp" {
+  name                = var.app_service_plan_name
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  os_type             = "Linux"
+  sku_name            = "F1"
 }
 
-resource "azure_linux_web_app" "alwa" {
-    name = var.app_service_name // to be checked
-    resource_group_name = azure_resource_group.rg.name
-    location = azure_resource_group.rg.location
-    service_plan_id = azure_service_plan.asp.id
+resource "azurerm_linux_web_app" "alwa" {
+  name                = var.app_service_name // to be checked
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  service_plan_id     = azurerm_service_plan.asp.id
+  connection_string {
+    name  = "DefaultConnection"
+    type  = "SQLAzure"
+    value = "Data Source=tcp:${azurerm_mssql_server.sqlserver.fully_qualified_domain_name},1433;Initial Catalog=${azurerm_mssql_database.database.name};User ID=${azurerm_mssql_server.sqlserver.administrator_login};Password=${azurerm_mssql_server.sqlserver.administrator_login_password};Trusted_Connection=False; MultipleActiveResultSets=True;"
+  }
 
-    connection_string {
-        name = "DeafultConnection"
-        type = "SQLAzure"
-        value = "Data Source=tcp: ....... " /// to be filled
+  site_config {
+    application_stack {
+      dotnet_version = "6.0"
     }
-
-    site_config {
-        application_stack {
-            dotnet_version = "6.0"
-        }
-        always_on = false
-    }
+    always_on = false
+  }
 }
 
 resource "azurerm_mssql_server" "sqlserver" {
@@ -73,8 +72,8 @@ resource "azurerm_mssql_firewall_rule" "firewall" {
 }
 
 resource "azurerm_app_service_source_control" "repo" {
-  app_id   = azurerm_linux_web_app.alwa.id
-  repo_url = var.repo_URL 
-  branch   = "main"
+  app_id                 = azurerm_linux_web_app.alwa.id
+  repo_url               = var.repo_URL
+  branch                 = "main"
   use_manual_integration = true
 }

@@ -1,0 +1,65 @@
+1. TO TEST THE APP LOCALLY (NOT REQUIRED) install the app:
+a - open the front end folder and run:
+>> npm install 
+** in package.json file we can see the script to start the app 
+b - open the back end folder as well and run:
+>> npm install 
+** in package.json file we can see the script to start the app 
+c - run the frontend and the back end with:
+>> npm start
+
+2. Create Dockerfile in frontend and backend folder.
+a- frontend Dockerfile
+after writing the file, build the image:
+>> docker build -t goals-backend .
+b- backend Dockerfile
+after writing the file, build the image:
+>> docker build -t goals-frontend .
+
+3. downloading mongo image
+>> docker pull mongo
+
+4. (NOT REQUIRED FOR THE TEST) to test the images locally before creating docker-compose file:
+a. create network:
+>> docker network create goals
+b. create a volume:
+>> docker volume create data # for mongo
+>> docker volume create logs # for backend service
+>> docker volume create node_modules # for backend service
+c. in backend/app.js add username and password for mongo (this step should be done before building the image for the backend):
+  `mongodb://max:secret@mongodb:27017/course-goals?authSource=admin`,
+- run the command for mongo image:
+>> docker run -d --name mongodb --network goals -e MONGO_INITDB_ROOT_USERNAME=max -e MONGO_INITDB_ROOT_PASSWORD=secret -v data:/data/db mongo
+- run the command for backend image (with two volumes and port 80):
+>> docker run -d --name backend --network goals -p 80:80 -v logs:/logs -v node_modules:/node_modules goals-backend
+- run the command for the frontend image (should be run from the folder frontend "because of the volume folder path"):
+>> docker run -d --name frontend --network goals -p 3001:3000 -v .\src:/src  goals-frontend 
+you will receive a message the docker wants to access the folder, accept it.
+
+5. pushing the images to docker hub:
+- login first in dockerdesktop, then in the terminal run:
+>> docker login
+- change the name of the images to include the unsername in docker hub:
+>> docker tag goals-frontend murtadoc/goals-frontend
+>> docker tag goals-backend murtadoc/goals-backend
+- pushing the images to dockerhub:
+>> docker push murtadoc/goals-frontend
+>> docker push murtadoc/goals-backend
+
+6. create docker-compose file 
+- use composerize.com to convert the docker run commands from step 4 "in composerize use V2-3.x"
+- change the images to those on dockerhub
+- make sure to include all the volumes 
+- make sure to correct the volumes of the front end to be like this:
+        volumes:
+            - ./frontend/src:/src
+as we gonna run the docker compose from the main folder of the project
+in the file use the port of front end (3001) and not (3000) as it interfers with grafana port 
+- run the commands (before running, delete all the local containers, images and volumes):
+>> docker-compose build 
+if it doesnt show any error message it means it is ok
+>> docker-compose up -d
+
+if there is an issue, add network under each service:
+        networks:
+            - goals

@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+    mongo:
+        container_name: mongodb
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=max
+            - MONGO_INITDB_ROOT_PASSWORD=secret
+        volumes:
+            - data:/data/db
+        image: mongo
+    backend:
+        ports:
+            - 80:80
+        volumes:
+            - logs:/logs
+            - node_modules:/node_modules
+        image: murtadoc/goals-backend        
+    frontend:
+        ports:
+            - 3001:3000
+        volumes:
+            - ./frontend/src:/src
+        image: murtadoc/goals-frontend
+networks:
+    goals:
+volumes:
+    data:
+    logs:
+    node_modules:
