@@ -38,7 +38,7 @@ Organization: MurtadaAhmed
 repository: examprepdemotask113022024
 breanch: main
 
-After that clicj on the button (Save)
+After that click on the button (Save)
 
 4. place the screenshots and the url link in the folder (murtadoc-task-1)
 

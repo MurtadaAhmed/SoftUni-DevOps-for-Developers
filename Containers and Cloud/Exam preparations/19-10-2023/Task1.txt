@@ -1,0 +1,65 @@
+1. generate the docker file from visual studio
+after that move the docker file to the main directory
+2. build the image
+>> docker build -t contacts .
+3. creating sqldata volume, network and downloading the mssql image and run it
+>> docker network create contacts
+>> docker volume create sqldata
+>> docker run -e 'ACCEPT_EULA=Y' -e MSSQL_SA_PASSWORD=myStrongPassword12# -p 1433:1433 -v sqldata:/var/opt/mssql/sqlserver --name sqlserver --network contacts -d mcr.microsoft.com/mssql/server
+4. test the app:
+>> docker run -d -p 80:80 --network contacts contacts
+
+5. docker-compose:
+using comporesize website to convert these lines:
+>> docker run -e 'ACCEPT_EULA=Y' -e MSSQL_SA_PASSWORD=myStrongPassword12# -p 1433:1433 -v sqldata:/var/opt/mssql/sqlserver --name sqlserver --network contacts -d mcr.microsoft.com/mssql/server
+container name should be sqlserver
+image: mcr.microsoft.com/mssql/server
+deploy:
+            resources:
+                limits: # or reservations
+                    cpus: '2'
+                    memory: 2GB
+>> docker run -d -p 80:80 --network contacts contacts
+in the network section keep only the network name, remove external:true
+add:
+    build:
+        dockerfile: ./Dockerfile 
+    restart: on-failure
+    domainname: murtadoc
+
+add the volume, all the networks can be removed.
+volumes:
+  sqldata:
+    driver: azure_file
+    driver_opts:
+        share_name: sql-volume
+        storage_account_name: murticontactsstorageacc
+
+6. azur:
+login to azur:
+>> az login
+create resource group:
+>> az group create --name "murticontactsrg" --location westeurope
+create container registry:
+>> az acr create --resource-group murticontactsrg --name murticontactsscr --sku Basic
+Renaming the image:
+>> docker tag contacts murticontactsscr.azurecr.io/contacts
+
+7. login to container registry and push the image:
+>> az acr login --name murticontactsscr.azurecr.io
+>> docker push murticontactsscr.azurecr.io/contacts
+
+8. put the image contacts murticontactsscr.azurecr.io/contacts in docker-compose, and remove the build part
+
+9. create context in azure so we we run docker-compose to run on azure and not locally
+>> docker context create aci contactsazure
+select the resource group murticontactsrg
+>> docker context use contactsazure
+to show it:
+>> docker context show 
+
+10. run it:
+docker-compose up -d
+
+11. the domain name can be found in:
+Resources groups >> select the resource group >> select the container instance >> FQDN
