@@ -1,7 +1,7 @@
 version: "3.8"
 services:
     mongo:
-        container_name: mongodb
+        container_name: mongodb # it is mandatory to be with this name, as it is mentioned in the backend/app.js
         environment:
             - MONGO_INITDB_ROOT_USERNAME=max
             - MONGO_INITDB_ROOT_PASSWORD=secret

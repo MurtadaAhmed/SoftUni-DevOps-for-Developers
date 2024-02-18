@@ -28,5 +28,6 @@ after writing the codes inside every file run:
 >> terraform apply -var-file=values.tfvars
 and type yes
 
+** if there is an error sqlserver name already exists, change the names of sql_server_name, resource_group_name, app_service_plan_name and app_service_name in values.tfvars 
 
 4. place a screenshot of the app and terraform files in murtadoc-tast-2 folder

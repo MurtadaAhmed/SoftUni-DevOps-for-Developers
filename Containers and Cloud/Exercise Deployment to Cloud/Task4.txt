@@ -5,7 +5,7 @@
 >> docker run -p 80:80 nginxdemos/hello
 >> docker ps
 here you can see the ip address of the server
-to access the ip address from the azure porta >> Resource groups >> choose the resource >> overview >> clok om the name of the container instance >> IP address
+to access the ip address from the azure porta >> Resource groups >> choose the resource >> overview >> clok on the name of the container instance >> IP address
 >> docker logs exciting-curran # exciting-curran is the container ID
 >> docker stop exciting-curran
 >> docker rm exciting-curran

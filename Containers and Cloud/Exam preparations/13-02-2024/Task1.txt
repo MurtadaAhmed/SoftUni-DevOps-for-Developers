@@ -32,14 +32,17 @@ value: mongodb://firsttaskmurti-server:9hhmeMQbT37VA1NZPjNHDmIn02cTKdJ9P7vssvWec
 
 After that click on the button (Save)
 
+*** if there is an issue add also DATABASE_NAME
+the value is what we got from the first step firsttaskmurti-database
+
 - Now go Deployment Center (from the left side menu)
 Soure: Github 
 Organization: MurtadaAhmed
 repository: examprepdemotask113022024
 breanch: main
-
+If there is an issue use in the Authentication: Basic Authentication
 After that click on the button (Save)
 
 4. place the screenshots and the url link in the folder (murtadoc-task-1)
-
+*** When taking screenshot for the app service configuration, make sure to cliclk (Hidden value. Click to show value) before taking the screenshot to show the values of the fields
 5. keep the app running.

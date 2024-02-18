@@ -3,18 +3,21 @@ PS C:\Program Files (x86)\blackbox_exporter> .\blackbox_exporter.exe
 access it on>> http://localhost:9115/
 test it >> http://localhost:9115/probe?target=https://softuni.bg
 2. inside promethius folder create a file:
-prometheus-exam.yml
+prometheus-exam.yml # add the website of the running application in targets (according to the task requirement)
 run it with:
 PS C:\Program Files (x86)\prometheus> .\prometheus.exe --config.file=prometheus-exam.yml
 
 access it on >> http://localhost:9090
+From status > configuration we can see our configuration 
+From status > Targets we can see our target
+From Graph > Graph test it with probe_http_status_code > Execute
 
 3. alert manager:
 visit https://webhook.site and copy "Your unique URL"
 https://webhook.site/b509d203-d35b-4ed1-a856-901d09ea6117
 
 create alertmanager-exam.yml in alertmanager folder and add the webhook.site url there
-
+amend it as required by the tast
 run it with:
 PS C:\Program Files (x86)\alertmanager> .\alertmanager.exe --config.file=alertmanager-exam.yml
 
@@ -39,5 +42,6 @@ from the left side menu >> Dashboards >> New >> New dashboard >> Add visualizati
 - now on the right side click on "Time series" , type in the field Search for ... "Histogram" and select it
 - now from the left lower side (Metric) click on (select metric) and search with (probe_duration_seconds) and select it and then click on (Run queries)
 - Export dashboard:
-click on Apply on upper right side >> click on the share icon in the middle to the left side >> Export tab >> click on "Export for sharing externally" and then (Save to file)
+
+click on Save on upper right side >> click on the share icon in the middle to the left side >> Export tab >> click on "Export for sharing externally" and then (Save to file)
 

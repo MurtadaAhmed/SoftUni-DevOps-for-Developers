@@ -1,0 +1,11 @@
+groups:
+  - name: Status code not 200
+    rules:
+      - alert: StatusCodeNot200
+        expr: probe_http_status_code != 200
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Status code not 200"
+          description: "Status code not is no 200"

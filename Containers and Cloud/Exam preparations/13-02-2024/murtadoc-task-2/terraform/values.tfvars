@@ -1,7 +1,7 @@
 resource_group_name      = "rg-task2"
 resource_group_location  = "West Europe"
 app_service_plan_name    = "asp-task2"
-app_service_name         = "lwa-task2"
+app_service_name         = "lwa-task2" # this will be domain name
 sql_server_name          = "sqlserver-task2"
 sql_server_database_name = "Contacts"
 sql_server_username      = "testuser1"

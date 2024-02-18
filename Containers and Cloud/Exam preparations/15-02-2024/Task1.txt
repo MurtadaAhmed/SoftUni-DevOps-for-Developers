@@ -28,13 +28,19 @@ b. create a volume:
 >> docker volume create node_modules # for backend service
 c. in backend/app.js add username and password for mongo (this step should be done before building the image for the backend):
   `mongodb://max:secret@mongodb:27017/course-goals?authSource=admin`,
-- run the command for mongo image:
+
+- run the command for mongo image: # --name mongodb is mandatory name, as it is mentioned in the backend/app.js
 >> docker run -d --name mongodb --network goals -e MONGO_INITDB_ROOT_USERNAME=max -e MONGO_INITDB_ROOT_PASSWORD=secret -v data:/data/db mongo
+
 - run the command for backend image (with two volumes and port 80):
 >> docker run -d --name backend --network goals -p 80:80 -v logs:/logs -v node_modules:/node_modules goals-backend
+
 - run the command for the frontend image (should be run from the folder frontend "because of the volume folder path"):
 >> docker run -d --name frontend --network goals -p 3001:3000 -v .\src:/src  goals-frontend 
+
 you will receive a message the docker wants to access the folder, accept it.
+
+you can now test the app 
 
 5. pushing the images to docker hub:
 - login first in dockerdesktop, then in the terminal run:
@@ -60,6 +66,6 @@ in the file use the port of front end (3001) and not (3000) as it interfers with
 if it doesnt show any error message it means it is ok
 >> docker-compose up -d
 
-if there is an issue, add network under each service:
+if there is an issue, add network under each service (and if it is requested in the tast):
         networks:
             - goals

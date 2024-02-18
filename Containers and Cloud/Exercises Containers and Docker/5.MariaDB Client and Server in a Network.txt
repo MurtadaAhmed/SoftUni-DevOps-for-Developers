@@ -1,4 +1,4 @@
-1. creating a newtwork:
+1. creating a network:
 docker network create some-network
 2. creating mariadb_server container
 docker run -d --network some-network \
