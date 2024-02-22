@@ -1,0 +1,19 @@
+general requirements:
+- github account
+- Word
+- render.com account
+- NODEJS
+- visual studio code
+- git 
+---------------------------------------------
+1. to test the application locally:
+inside the project folder:
+>> npm install
+>> npm start
+the application can be accessed on http://localhost:8080/
+---------------------------------------------
+2. run the tests:
+>> npm run test:unit
+---------------------------------------------
+3. Create new repository:
+- create .gitignore in the home directory of the app and add node_modules inside it.
