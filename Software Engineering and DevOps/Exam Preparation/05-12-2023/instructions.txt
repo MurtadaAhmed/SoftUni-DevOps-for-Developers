@@ -17,3 +17,8 @@ the application can be accessed on http://localhost:8080/
 ---------------------------------------------
 3. Create new repository:
 - create .gitignore in the home directory of the app and add node_modules inside it.
+- create the repository with the project files:
+https://github.com/MurtadaAhmed/murtadoc-exam-prep-12-05-2023
+---------------------------------------------
+4. create a new branch in github and name it junior-dev
+---------------------------------------------
