@@ -319,6 +319,6 @@ add run-ui-tests job in pipeline.yml file
     - name: run UI tests for the application
       run: npm run test:ui
 ******
-now open the tests files in tests folder, and change http://localhost:8080 to the app url https://murtadoc-boardgames.onrender.com
+now open the tests files in tests/ui folder, and change http://localhost:8080 to the app url https://murtadoc-boardgames.onrender.com
 
 after that commit the changes in github
