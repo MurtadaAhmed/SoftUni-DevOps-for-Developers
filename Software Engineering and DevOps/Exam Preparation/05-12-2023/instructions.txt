@@ -22,3 +22,303 @@ https://github.com/MurtadaAhmed/murtadoc-exam-prep-12-05-2023
 ---------------------------------------------
 4. create a new branch in github and name it junior-dev
 ---------------------------------------------
+5. clone the github repo locally, open it in visual studio code, and shift to the second branch from the left lower side.
+---------------------------------------------
+6. running the tests:
+in the clone copy of the repo:
+>> npm install
+>> npx playwright install 
+>> npm start 
+now in another consule run the tests:
+>> npm run test:ui
+only one test will pass
+make sure that you are in junior-dev branch by running:
+>> git status
+
+now check the results of npm run test:ui to fix the failed tests
+A.
+********
+1) tests\ui\about.test.js:3:1 › Check about page =================================================
+
+    TypeError: Cannot read properties of null (reading 'textContent')
+
+      4 |   await page.goto('http://localhost:8080/about');
+      5 |   const heading = await page.$('h2');
+    > 6 |   const text = await heading.textContent();
+        |                              ^
+      7 |   expect(text).toBe('About');
+      8 | });
+      9 |
+
+        at C:\Users\Murti\Desktop\murtadoc-exam-prep-12-05-2023\tests\ui\about.test.js:6:30
+********
+go to the page http://localhost:8080/about and inspect (About), you will see that it is h1 not h2 
+fix it in the test file: tests\ui\about.test.js , and re run the test 
+>> npm run test:ui
+now two tests should pass 
+
+B.
+********
+ 4) tests\ui\home.test.js:3:1 › Check home page ===================================================
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected substring: "Welcome"
+    Received string:    "Boardgames Collection"
+
+      5 |     const heading = await page.$('h1');
+      6 |     const text = await heading.textContent();
+    > 7 |     expect(text).toContain('Welcome');
+        |                  ^
+      8 |   });
+      9 |
+
+        at C:\Users\Murti\Desktop\murtadoc-exam-prep-12-05-2023\tests\ui\home.test.js:7:18
+********
+in the file tests\ui\home.test.js replate "Welcome" with "Boardgames Collection" and re-run the test:\
+>> npm run test:ui
+now 3 tests shoud pass
+
+C.
+********
+1) tests\ui\boardgames.test.js:3:1 › Check boardgames page =======================================
+
+    Error: expect(received).toBeTruthy()
+
+    Received: null
+
+      4 |     await page.goto('http://localhost:8080/collection');
+      5 |     const list = await page.$('ul');
+    > 6 |     expect(list).toBeTruthy();
+        |                  ^
+      7 |   });
+      8 |
+
+        at C:\Users\Murti\Desktop\murtadoc-exam-prep-12-05-2023\tests\ui\boardgames.test.js:6:18
+********
+in the file tests\ui\boardgames.test.js correct the url to be http://localhost:8080/boardgames and re-run the test:
+>> npm run test:ui
+now 4 tests should pass 
+
+D.
+********
+2) tests\ui\header.test.js:3:1 › Check header ====================================================
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Boardgame Collection"
+    Received: "Home"
+
+      5 |     const homeLink = await page.$('a[href="/"]');
+      6 |     const text = await homeLink.textContent();
+    > 7 |     expect(text).toBe('Boardgame Collection');
+        |                  ^
+      8 |   });
+      9 |
+
+        at C:\Users\Murti\Desktop\murtadoc-exam-prep-12-05-2023\tests\ui\header.test.js:7:18
+********
+in the file tests\ui\header.test.js replace "Boardgame Collection" with "Home" and re-run the test:
+>> npm run test:ui
+now 5 tests should pass
+
+E.
+********
+1) tests\ui\footer.test.js:3:1 › Check footer ====================================================
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected substring: "© 2023 - Software Engineеring and DevOps exam preparation"   
+    Received string:    "© 2023 - Software Engineering and DevOps regular exam"       
+
+      5 |     const footer = await page.$('footer');
+      6 |     const text = await footer.textContent();
+    > 7 |     expect(text).toContain('© 2023 - Software Engineеring and DevOps exam preparation');
+        |                  ^
+      8 |   });
+      9 |
+
+        at C:\Users\Murti\Desktop\murtadoc-exam-prep-12-05-2023\tests\ui\footer.test.js:7:18
+********
+in the file tests\ui\footer.test.js replace the text with "© 2023 - Software Engineering and DevOps regular exam" and re-run the test:
+>> npm run test:ui
+now all the tests should pass 
+---------------------------------------------
+7. commiting the corrected tests to github:
+>> git status 
+make sure it shows the branch junior-dev 
+>> git add .
+>> git commit -m "fixed tests" 
+>> git push origin
+
+now go to github repo page: https://github.com/MurtadaAhmed/murtadoc-exam-prep-12-05-2023
+click on (Compare & pull request)
+add title and description
+click on (Create pull request)
+wait a little bit then click on (Merge pull request) and then (Confirm merge)
+---------------------------------------------
+8. Implement CI:
+Go to the github repo page: https://github.com/MurtadaAhmed/murtadoc-exam-prep-12-05-2023
+click on (Actions)
+search with (node)
+From Node.js click (Configure)
+rename the title of the file pipeline.yml
+the content of the file should be:
+*********
+name: Build and test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the repo
+      uses: actions/checkout@v3
+    - name: Use Node.js18.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+        cache: 'npm'
+    - name: install project dependencies
+      run: npm install
+    - name: run unit tests for the application
+      run: npm run test:unit
+    - name: Disply Username
+      run: echo "Murtadoc"
+*********
+click on (Commit changes)
+Click on (Actions) to see the running test (Create pipeline.yml)
+
+now in command line:
+>> git checkout main 
+to shift to the main branch 
+>> git pull 
+now we can see our pipeline.yml file in github/workflows/
+---------------------------------------------
+9. Implement CD 
+
+A. deploying the app on render.com:
+go to render.com
+click on Dashboard
+click on New >> Web Service
+Build and deploy from a Git repository
+Next
+click on Connect infront of the repo namne 
+name: murtadoc-boardgames
+start command: npm run start
+select Free
+Create Web Service
+from Dashboard we can see the progress of the deployment
+once finished click on the service name in Dashboard to see the link there:
+https://murtadoc-boardgames.onrender.com/
+
+B. from web service settings page, change Auto-Deploy to No and save the change.
+
+C. From this page: https://github.com/marketplace/actions/render-deploy-action
+*****
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to production
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.MY_RENDER_SERVICE_ID }}
+          api-key: ${{ secrets.MY_RENDER_API_KEY }}
+          wait-for-success: true
+*****
+we get RENDER_SERVICE_ID and MY_RENDER_API_KEY in the following way:
+from github repo page https://github.com/MurtadaAhmed/murtadoc-exam-prep-12-05-2023
+go to Settings 
+click on Secrets and variables from the left side menu
+select Actions 
+- click on (New repository secret)
+Name: MY_RENDER_SERVICE_ID
+Secret: can be found on render.com settings page for the webservice >> Deploy Hook
+https://api.render.com/deploy/srv-cncd6puct0pc73fqr3rg?key=B6c9IaKpdlM
+we need to put just this part: srv-cncd6puct0pc73fqr3rg
+then click (Add secret)
+
+- click on (New repository secret)
+Name: MY_RENDER_API_KEY
+Secret: can be found on render.com >> Account Settings >> API Keys >> Create API Key 
+put any name
+copy the key: rnd_4VfOIB97hehcrinZKNByxm1kw9UN and put it as secret in github
+then click (Add secret)
+
+The final pipeline.yml file should look like this:
+*********
+name: Build and test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the repo
+      uses: actions/checkout@v3
+    - name: Use Node.js18.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+        cache: 'npm'
+    - name: install project dependencies
+      run: npm install
+    - name: run unit tests for the application
+      run: npm run test:unit
+    - name: Disply Username
+      run: echo "Murtadoc"
+
+  build:
+    needs: build-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to production
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.MY_RENDER_SERVICE_ID }}
+          api-key: ${{ secrets.MY_RENDER_API_KEY }}
+*********
+commit the changes to github 
+in githib repo page Actions we should see the job 
+after it completes, we can see the new deployment in the dashboard in render.com 
+
+---------------------------------------------
+10. Add UI Tests to CI/CD:
+add run-ui-tests job in pipeline.yml file 
+******
+  run-ui-tests:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the repo
+      uses: actions/checkout@v3
+    - name: Use Node.js18.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+        cache: 'npm'
+    - name: install project dependencies
+      run: npm install
+    - name: install Playwright
+      run: npx playwright install 
+    - name: run UI tests for the application
+      run: npm run test:ui
+******
+now open the tests files in tests folder, and change http://localhost:8080 to the app url https://murtadoc-boardgames.onrender.com
+
+after that commit the changes in github
