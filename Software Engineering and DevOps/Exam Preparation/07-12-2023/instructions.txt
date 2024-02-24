@@ -1,0 +1,356 @@
+1. test the application locally:
+>> npm install
+create .gitignore and add node_modules
+>> npm start
+as the application runs on port 8080, you might need to stop Jenkins if it is running
+the application can be accessed on http://localhost:8080/
+>> npm run test:unit
+all the tests should pass
+
+------------------------------------------------
+2. create github repo with the app
+https://github.com/MurtadaAhmed/murtadoc-exam-prep-07-12-2023
+------------------------------------------------
+3.Create a new branch junior-dev in vistual studio code.
+>> git status
+To confirm that we are using this new branch
+Push the new branch (from visual studio code)
+Confirm the branch is created in github website as well.
+------------------------------------------------
+4.Create README.md file in the main directory and add the username
+Confirm the change is made on github website as well
+------------------------------------------------
+5.Fix the failing tests:
+>> npm run test:ui
+All the tests should fail.
+
+A.
+*****
+2) tests\ui\add-book.test.js:3:1 ? Check add book page ===========================================
+
+    Error: expect(received).toBeTruthy()
+
+    Received: null
+
+      4 |     await page.goto('http://localhost:8080/add-a-book');
+      5 |     const form = await page.$('list');
+    > 6 |     expect(form).toBeTruthy();
+        |                  ^
+      7 |   });
+      8 |
+
+        at C:\Users\Murti\Desktop\murtadoc-exam-prep-07-12-2023\tests\ui\add-book.test.js:6:18
+*****
+In the file tests\ui\add-book.test.js correct the link to be:
+http://localhost:8080/add-book
+Replace await page.$('list'); to be
+await page.$('form');
+And re-run the test.
+
+B.
+*****
+1) tests\ui\about.test.js:3:1 ? Check about page =================================================
+
+    TypeError: Cannot read properties of null (reading 'textContent')
+
+      4 |   await page.goto('http://localhost:8080/about');   
+      5 |   const heading = await page.$('h3');
+    > 6 |   const text = await heading.textContent();
+        |                              ^
+      7 |   expect(text).toBe('About us');
+      8 | });
+      9 |
+
+        at C:\Users\Murti\Desktop\murtadoc-exam-prep-07-12-2023\tests\ui\about.test.js:6:30
+*****
+In the file tests\ui\about.test.js replace ¡°h3¡± with ¡°h1¡±, and ¡°About us¡± with ¡°About¡±
+
+And re-run the test.
+
+C.
+*****
+ 2) tests\ui\footer.test.js:3:1 ? Check footer ====================================================
+
+    Error: expect(received).toContain(expected) // indexOf    
+
+    Expected substring: "? 2023 - Software Engineering and DevOps Retake Exam."
+    Received string:    "? 2023 - Software Engineering and DevOps Retake Exam"
+
+      5 |     const footer = await page.$('div');
+      6 |     const text = await footer.textContent();        
+    > 7 |     expect(text).toContain('? 2023 - Software Engineering and DevOps Retake Exam.');
+        |                  ^
+      8 |   });
+      9 |
+
+        at C:\Users\Murti\Desktop\murtadoc-exam-prep-07-12-2023\tests\ui\footer.test.js:7:18
+*****
+In the file tests\ui\footer.test.js , remove ¡°.¡± at the end of the text.
+And re-run the test.
+
+D.
+******
+ 2) tests\ui\header.test.js:3:1 ? Check header ====================================================
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Welcome"
+    Received: "Home"
+
+      5 |     const homeLink = await page.$('a[href="/"]');   
+      6 |     const text = await homeLink.textContent();      
+    > 7 |     expect(text).toBe('Welcome');
+        |                  ^
+      8 |   });
+      9 |
+
+        at C:\Users\Murti\Desktop\murtadoc-exam-prep-07-12-2023\tests\ui\header.test.js:7:18
+******
+In the file tests\ui\header.test.js, replace ¡°Welcome¡± with ¡°Home¡±
+And re-run the test.
+
+E.
+******
+1) tests\ui\books.test.js:3:1 ? Check books page =================================================
+
+    Error: expect(received).toBeTruthy()
+
+    Received: null
+
+      4 |     await page.goto('http://localhost:8080/library');
+      5 |     const list = await page.$('ul');
+    > 6 |     expect(list).toBeTruthy();
+        |                  ^
+      7 |   });
+      8 |
+
+        at C:\Users\Murti\Desktop\murtadoc-exam-prep-07-12-2023\tests\ui\books.test.js:6:18
+******
+In the file tests\ui\books.test.js, replace the link with http://localhost:8080/books
+And re-run the test.
+
+F.
+******
+1) tests\ui\home.test.js:3:1 ? Check home page ===================================================
+
+    TypeError: Cannot read properties of null (reading 'textContent')
+
+      4 |     await page.goto('http://localhost:8080/');      
+      5 |     const heading = await page.$('h2');
+    > 6 |     const text = await heading.textContent();       
+        |                                ^
+      7 |     expect(text).toContain('Home - Library');       
+      8 |   });
+      9 |
+
+        at C:\Users\Murti\Desktop\murtadoc-exam-prep-07-12-2023\tests\ui\home.test.js:6:32
+******
+In the file tests\ui\home.test.js, replace h2 with h1, and replace 'Home - Library' with ¡°Books Collection¡±
+
+And re-run the test.
+All the tests should pass now.
+Push the changed tests files to github
+------------------------------------------------
+6.Go to github page and click on (compare & pull request) and merge the two branches. If we cannot see this option  go to (Pull requests) >> New >> select the main and junior-dev branches and proceed with compare and pull request.
+------------------------------------------------
+7.Implement CI:
+Go to the repo page, search with (node) , select Configure under Node.js
+File name: pipeline.yml
+******
+name: Build and Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Use Node.js 18.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+        cache: 'npm'
+    - name: Install npm dependencies
+      run: npm install
+    - name: Run unit tests
+      run: npm run test:unit
+    - name: display softuni username
+      run: echo "Murtadoc"
+******
+After commiting the file, go to Actions to see the running workflow
+
+------------------------------------------------
+8.https://render.com/ >> Dashboard >> New >> Web Service >> Build and deploy from a Git repository >> Next >> infront of the repository click Connect
+Name: write it as required in the task
+Branch: main
+Runtime: Node
+Build command: npm install
+Start command: npm start
+Instance Type: Free
+Then click on (Create Web Service)
+
+Once the deployment finishes you can access the link on the top of this page:https://murtadoc-exam-prep-07-12-2023.onrender.com
+
+After that go to settings page on the page of the web service:
+Auto-Deploy: No
+And save the changes
+
+Next we need to add render github action in popeline.yml:
+https://github.com/marketplace/actions/render-deploy-action
+
+******
+build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to production
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.MY_RENDER_SERVICE_ID }}
+          api-key: ${{ secrets.MY_RENDER_API_KEY }}
+          wait-for-success: true
+******
+
+Now we need to add MY_RENDER_SERVICE_ID and MY_RENDER_API_KEY:
+Got to repo page on github >> settings >> Secrets and variables >> Actions >> New Repository Secret:
+Name: MY_RENDER_SERVICE_ID
+Secret: to be taken from the settings page of the web service in render >> copy the Deploy Hook link: https://api.render.com/deploy/srv-cncim4qcn0vc73f28l1g?key=kD7dlEDlfI0
+We need just this part: srv-cncim4qcn0vc73f28l1g
+
+Add another repository secret:
+Name: MY_RENDER_API_KEY
+Secret: to be taken from account settings in render >> API Keys >> Create API Key >> put any name >> Create API Key >> copy the key here:
+rnd_uovWYkpC7rtFRMazc6HlPMMViqGn
+
+
+The final pipeline.yml should look like this:
+******
+name: Build and Test
+
+on:
+? push:
+? ? branches: [ "main" ]
+? pull_request:
+? ? branches: [ "main" ]
+
+jobs:
+? build-test:
+? ? runs-on: ubuntu-latest
+
+? ? steps:
+? ? - name: Checkout repository
+? ? ? uses: actions/checkout@v3
+? ? - name: Use Node.js 18.x
+? ? ? uses: actions/setup-node@v3
+? ? ? with:
+? ? ? ? node-version: 18.x
+? ? ? ? cache: 'npm'
+? ? - name: Install npm dependencies
+? ? ? run: npm install
+? ? - name: Run unit tests
+? ? ? run: npm run test:unit
+
+? deploy:
+? ? needs: build-test
+? ? runs-on: ubuntu-latest
+? ? steps:
+? ? ? - name: Deploy to production
+? ? ? ? uses: johnbeynon/render-deploy-action@v0.0.8
+? ? ? ? with:
+? ? ? ? ? service-id: ${{ secrets.MY_RENDER_SERVICE_ID }}
+? ? ? ? ? api-key: ${{ secrets.MY_RENDER_API_KEY }}
+
+******
+------------------------------------------------
+9.Add UI Tests to CI/CD
+
+Add the app url https://murtadoc-exam-prep-07-12-2023.onrender.com in all ui test files instead of localhost:8080
+
+
+Add the ui tests in pipeline.yml:
+******
+? run-ui-tests:
+? ? runs-on: ubuntu-latest
+? ? needs: deploy
+? ? steps:
+? ? - name: Checkout repository
+? ? ? uses: actions/checkout@v3
+? ? - name: Use Node.js 18.x
+? ? ? uses: actions/setup-node@v3
+? ? ? with:
+? ? ? ? node-version: 18.x
+? ? ? ? cache: 'npm'
+? ? - name: Install npm dependencies
+? ? ? run: npm install
+? ? - name: Setup Playwright
+? ? ? run: npx playwright install ?
+? ? - name: Run ui tests
+? ? ? run: npm run test:ui
+******
+
+The final pipeline.yml should be:
+
+******
+
+name: Build and Test
+
+on:
+? push:
+? ? branches: [ "main" ]
+? pull_request:
+? ? branches: [ "main" ]
+
+jobs:
+? build-test:
+? ? runs-on: ubuntu-latest
+
+? ? steps:
+? ? - name: Checkout repository
+? ? ? uses: actions/checkout@v3
+? ? - name: Use Node.js 18.x
+? ? ? uses: actions/setup-node@v3
+? ? ? with:
+? ? ? ? node-version: 18.x
+? ? ? ? cache: 'npm'
+? ? - name: Install npm dependencies
+? ? ? run: npm install
+? ? - name: Run unit tests
+? ? ? run: npm run test:unit
+? ? - name: display softuni username
+? ? ? run: echo "Murtadoc"
+
+? deploy:
+? ? needs: build-test
+? ? runs-on: ubuntu-latest
+? ? steps:
+? ? ? - name: Deploy to production
+? ? ? ? uses: johnbeynon/render-deploy-action@v0.0.8
+? ? ? ? with:
+? ? ? ? ? service-id: ${{ secrets.MY_RENDER_SERVICE_ID }}
+? ? ? ? ? api-key: ${{ secrets.MY_RENDER_API_KEY }}
+ ?
+? run-ui-tests:
+? ? runs-on: ubuntu-latest
+? ? needs: deploy
+? ? steps:
+? ? - name: Checkout repository
+? ? ? uses: actions/checkout@v3
+? ? - name: Use Node.js 18.x
+? ? ? uses: actions/setup-node@v3
+? ? ? with:
+? ? ? ? node-version: 18.x
+? ? ? ? cache: 'npm'
+? ? - name: Install npm dependencies
+? ? ? run: npm install
+? ? - name: Setup Playwright
+? ? ? run: npx playwright install ?
+? ? - name: Run ui tests
+? ? ? run: npm run test:ui
+******
+
