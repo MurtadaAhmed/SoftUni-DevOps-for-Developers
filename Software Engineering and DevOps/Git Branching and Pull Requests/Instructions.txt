@@ -1,0 +1,36 @@
+version control system = source control system
+Git: global information tracker
+
+** user info can be found in C:\Users\Murti\.gitconfig
+
+-----------------
+git clone REPO_URL
+git status (check if there is any local changes)
+git pull (download any new changes in the repo)
+git add (to prepare the file to be committed to the local repository)
+git commit -m "sample message" (to commit to local repository) // -m means message
+git push (to push to the repository server)
+--------------------
+git init (to create git repository)
+create github repository
+git remote add origin REPO_URL
+git push -u origin main
+
+----
+Branching
+local branch 
+remote branch
+upstrean branch (connected both branches)
+git branch -a
+git branch newbranchname
+git checkout newbranch (switch to new branch)
+git checkout -b newsecondbranch
+git branch --verbose
+git branch --vv 
+git branch --all --verbose 
+git push -u origin newsecondbranch
+git branch -d newsecondbranch
+git push origin -d name_of_remote_branch
+
+------
+https://education.github.com/git-cheat-sheet-education.pdf
