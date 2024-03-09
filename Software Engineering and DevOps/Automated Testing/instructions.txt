@@ -1,0 +1,9 @@
+to install Playwright (run it in CMD if there is an error with powershell)
+>> npm install -D @playwright/test
+>> npx playwright install
+
+the nests should be written in (test) folder under name:
+todo.test.js
+
+to run the tests:
+>> npx playwright test
