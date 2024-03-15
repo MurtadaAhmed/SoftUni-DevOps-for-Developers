@@ -1,0 +1,18 @@
+Library-Cataloge
+>> npm install
+>> npm install -D @playwright/test
+>> npm start
+the server can be accessed on http://localhost:3001
+
+in another terminal, opens (server) folder and run:
+>> node server.js
+
+create folder (tests) and inside it a file (ui.test.js)
+
+in (package.json) file add:
+"test-ui": "npx playwright test tests/ui.test.js"
+under "scripts"
+
+
+
+******CI/CD with GitHub Actions and Azure
