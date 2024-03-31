@@ -1,4 +1,4 @@
-Library-Cataloge
+Library-Cataloge:
 >> npm install
 >> npm install -D @playwright/test
 >> npm start
@@ -15,4 +15,16 @@ under "scripts"
 
 
 
-******CI/CD with GitHub Actions and Azure
+Books:
+npm install express
+npm install body-parser
+npm install mocha
+npm install chai
+npm install chai-http
+node server.js
+
+
+create a file for writing tests: (api.test.js)
+run the tests with:
+>> npx mocha api.test.js
+
