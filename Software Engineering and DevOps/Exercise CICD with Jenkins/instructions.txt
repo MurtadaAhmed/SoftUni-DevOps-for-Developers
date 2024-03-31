@@ -1,0 +1,71 @@
+1. run the app locally:
+navigate to Student-Registry-App and run:
+npm install
+
+change the port 8080 (as Jenkins is already running on it):
+CTRL+SHIFT+F >> search with 8080 and change it in the file to 8081
+
+>> npm start
+the app can be accessed now on  http://localhost:8081
+
+run the tests:
+>> npm test 
+
+2. create git repo with the app 
+https://github.com/MurtadaAhmed/Student-Registry-App-jenkins-exercise
+
+3. create job in Jenkins: 
+New Item >> item name: Student Registry App >> select Freestyle project >> OK >> Save
+
+Go to Configure >> Source Code Management >> Git >> enter repository URL
+change Branch Specifier into >> */main 
+Save
+
+4. Build Steps
+to bulid the app click on:
+Build Now
+under Workspace we can see the folders and files
+
+From Configure >> Build Steps >>  Execute Windows batch command
+>> npm install
+
+add build step >> Execute Windows batch command
+>> npm test
+
+Save
+Build Now
+
+
+// to make the job run automatically when there is change in github repository
+download ngrok and run it
+from https://dashboard.ngrok.com/get-started/your-authtoken generate tokin
+in ngrok command prompt type: 
+>> ngrok config add-authtoken PUT_AUTH_TOKEN_HERE
+>> ngrok http 8080
+then it will show a public url to access Jenkins
+
+
+from repo Settings >> Webhook >> Add Webhook:
+Payload URL: PUT_HERE_THE_PUBLIC_JENKINS_URLS/github-webhook/
+Content type: application/json
+and add the webhook
+
+now from the Jenkins job >> Configure >> Build Triggers >> tick GitHub hook trigger for GITScm polling >> Save
+
+
+// Docker
+add Dockerfile and docker-compose to the repo
+
+add the following commands in Jenkins:
+>> docker build -t murtadoc/studentapp:1.0.0 .
+>> docker login -u murtadoc --password WRITE_THE_PASSWORD_TOKEN_FOR_DOCKER_HUB // watch the lecture on how to add the user and password as variables
+you can get the docker token from docker hub >> My Account >> Security >> New Access Token 
+>> docker push murtadoc/studentapp:1.0.0
+
+
+// Docker compose
+edit the docker-compose file to add the docker hub username and repo, and change the port to 8081 .. also change the port in repo index.js file to 8081
+create a new job in Jenkins 
+add build step >> Execute Windows batch command
+>> docker pull murtadoc/studentapp:1.0.0
+>> docker-compose -f docker-compose.yml up -d
