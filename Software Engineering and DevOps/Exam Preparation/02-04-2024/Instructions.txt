@@ -1,0 +1,77 @@
+1. install the packages:
+>> npm install 
+
+2. run the app (make sure that Jenkins is not running, as it uses the port 8080):
+>> npm start
+
+3. create githib repo with the app files (make sure to check the name requirement for the repo):
+https://github.com/MurtadaAhmed/Murtadoc--exam-prep-02-04-2024
+
+4. create branch (junior-dev) and push it to the repo.
+
+5. make sure that you are in the new branch (junior-dev)
+
+6. run the unit tests in separate console:
+>> npm run test:unit
+all the tests should pass
+
+7. run the ui tests in separate console:
+>> npx playwright install  
+>> npm run test:ui
+all the tests will fail
+start fixing the tests, paying attention to:
+* checked text
+* the tag of the checked item
+* the link used in the test 
+all the 7 tests should pass (run the command 3 times)
+
+8. push the new changes with the fixed tests in branch (junior dev) to the repo
+
+9. create pull request to merge the branch (My Shopping List) into the main branch
+
+10. in visual studio code, shift to the main branch, and make pull request to retrieve the changes that was made to the main branch from the repo
+
+11. while in the main branch, run the ui tests to make sure that they pass
+
+12. Implement CI:
+- From the repo page >> Actions >> search with "Node" and open Node.js
+- include in the file:
+* npm install
+* npm run test:unit
+* echo "Murtadoc"
+- once the first action pass, pull the requests in visual studio code to continue editing the pipline.yml there
+
+13. Add UI Tests to CI:
+- add it as another job
+- make sure to include the following commands:
+*needs: build_test (the name of the first job)
+* npm install
+* npx playwright install
+* npm start &
+* npm run test:ui  
+- commit the changes to the repo to see the action.
+both of the tests should pass 
+
+14. Implement CD:
+- deply the repo in render.com and make the name of the url showing the softuni username
+- after the deployment finish, go to the settings of that service, and disable Auto-Deploy
+- from the same settings page, take the Deploy Hook link
+https://api.render.com/deploy/srv-co6ntp8l5elc739taq5g?key=IoxmsSiHqkA
+- from render.com >> account settings >> API Keys >> Create API Key and copy it 
+rnd_InRegnSsAocALNiTnkd70SFFVrXM
+- take the job for github Render Deploy Action from here:
+https://github.com/marketplace/actions/render-deploy-action
+- add it as new job in pipeline.yml file (without "wait-for-success: true")
+make sure to include:
+needs: ui_test (the name of the unit test job)
+do not commit the changes to the the repo yet.
+- from the github repo page, go to Settings >> Secrets and variables >> Actions
+- Create two new repository secrets:
+MY_RENDER_SERVICE_ID >> the service ID from reploy hook link
+MY_RENDER_API_KEY >> the render.com API key
+- commit the changes in pipeline.yml to github repo
+- go to actions to check the progress, once finished check the deployment in render.com 
+
+15. add github repo link, render.com service link and screenshots from GitHub Actions in solution file
+
+
