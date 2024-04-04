@@ -1,0 +1,43 @@
+>> npm install
+>> npm start
+add node_modules in .gitignore
+
+commit the repo in github, taking in consideration the naming requirement.
+https://github.com/MurtadaAhmed/Murtadoc-exam-prep-04-04-2024
+
+create branch junior-dev and publish it to the repo 
+
+fix the tests 
+
+push the changes to the repo branch
+
+merge the branches
+
+Actions >> Node.js >> Confugure
+add npm install, npm run test:unit + the softuni username echo "Murtadoc"
+
+check actions for the running of the job
+
+pull the changes from the main branch in virtual studio to access pipeline.yml file
+
+add UI tests as new job (copy the previous job) and add "needs" step, npx playwright install ,  npm start & and npm run test:ui  
+
+deploy on render, auto deply No 
+
+add render deploy job in github action 
+https://github.com/marketplace/actions/render-deploy-action
++ added "needs" step
+
+take Deploy Hook from settings of the service: https://api.render.com/deploy/srv-co7eeki1hbls73c5tvmg?key=ap1_EAOWtag
+generate API key from account settings: rnd_TbF8mHwJyE82e5G5hKxj1G3eR9qy
+
+add in github >> repo settings >> Actions secrets and variable 
+two secrests:
+MY_RENDER_SERVICE_ID: srv-co7eeki1hbls73c5tvmg
+MY_RENDER_API_KEY: rnd_TbF8mHwJyE82e5G5hKxj1G3eR9qy
+
+comit and push the changes in the pipeline
+
+check github action for the running jobs
+
+after the deployment job finishes check render for the deployment progress
